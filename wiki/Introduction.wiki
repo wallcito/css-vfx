@@ -1,6 +1,6 @@
 #summary Introduction to CSS Visual Effects
 
-= Introduction =
+== Introduction ==
 
 (Extended introduction here)
 
@@ -17,7 +17,7 @@
  * Inertia
  * Performance
 
-= CSS Visual Effects Reference =
+== CSS Visual Effects Reference ==
 
 Apple's extensions for iPhone Safari are documented here.
  * [http://webkit.org/specs/CSSVisualEffects/CSSTransforms.html CSS 3D Transforms]
