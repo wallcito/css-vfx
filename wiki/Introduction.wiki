@@ -6,9 +6,16 @@
 
 == Gem 1: Cover Flow (zflow) ==
 
-[http://css-vfx.googlecode.com/svn/trunk/examples/zflow.html CoverFlow Demo] using Flickr interesting photos feed.
+[http://css-vfx.googlecode.com/svn/trunk/examples/zflow.html Demo] - (uses flickr photos feed)
 
 (Description of how zflow is implemented.)
+
+ * Setup
+ * Reflections
+ * Touch controller
+ * Clicking
+ * Inertia
+ * Performance
 
 = CSS Visual Effects Reference =
 
