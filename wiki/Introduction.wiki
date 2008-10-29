@@ -1,0 +1,18 @@
+#summary One-sentence summary of this page.
+
+= Introduction =
+
+(Extended introduction here)
+
+== Gem 1: Cover Flow (zflow) ==
+
+[http://css-vfx.googlecode.com/svn/trunk/examples/zflow.html CoverFlow Demo] using Flickr interesting photos feed.
+
+(Description of how zflow is implemented.)
+
+= CSS Visual Effects Reference =
+
+Apple's extensions for iPhone Safari are documented here.
+ * [http://webkit.org/specs/CSSVisualEffects/CSSTransforms.html CSS 3D Transforms]
+ * [http://webkit.org/specs/CSSVisualEffects/CSSTransitions.html CSS Transitions]
+ * [http://webkit.org/specs/CSSVisualEffects/CSSAnimation.html CSS Animation]
