@@ -6,6 +6,8 @@
 
 == Gem 1: Cover Flow (zflow) ==
 
+http://groups.google.com/group/css-vfx/web/css-vfx-zflow-screenshot.jpg
+
 [http://css-vfx.googlecode.com/svn/trunk/examples/zflow.html Demo] - (uses flickr photos feed)
 
 (Description of how zflow is implemented.)
