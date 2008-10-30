@@ -11,22 +11,14 @@
     -webkit-touch-callout: none;
     -webkit-text-size-adjust: none;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-
-    width: 320px;
-    height: 416px;
-    margin: 0;
-    
-    font-family: Helvetica;
-
-    background-color: black;
-    color: white;
 }
 
 .zflow div.centering
 {
+/*
     position: absolute;
+*/
     -webkit-perspective: 600;
-    -webkit-perspective-origin: 160px 208px;
     -webkit-transform-style: preserve-3d;
     -webkit-transform: translateZ(0px);
 }
@@ -34,8 +26,8 @@
 .zflow div.tray
 {
     position: absolute;
-    left: 160px;
-    top: 208px;
+    left: 50%;
+    top: 50%;
     
     -webkit-transform-style: preserve-3d;
     -webkit-transform: translateX(0px);
