@@ -8,13 +8,29 @@
     
     <link rel="stylesheet" type="text/css" href="../vfx/zflow/zflow.css"></link>
     
+    <style type="text/css">
+
+    body
+    {
+        background-color: black;
+        color: white;
+        margin: 0;
+        padding: 0;
+        font-family: Helvetica;
+    }
+
+    .portrait { width: 320px; height: 416px; }
+    .landscape { width: 480px; height: 270px; }
+
+    </style>
+
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
     <script type="text/javascript" src="../vfx/zflow/zflow.js"></script>
 </head>
 
 <body class="zflow">
 
-<div class="centering">
+<div class="centering portrait">
     <div id="tray" class="tray"></div>
 </div>
 
@@ -41,6 +57,20 @@ function flickr(callback)
 
         callback(images);
     });
+}
+
+window.onorientationchange = function (event)
+{
+    if (window.orientation == 0)
+    {
+        jQuery("div.centering").attr("class", "centering portrait");
+    }
+    else
+    {
+        jQuery("div.centering").attr("class", "centering landscape");
+    }
+
+    window.setTimeout( function() { window.scrollTo(0, 0); }, 100 );
 }
 
 </script>
