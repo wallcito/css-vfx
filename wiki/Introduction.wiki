@@ -10,15 +10,7 @@ http://groups.google.com/group/css-vfx/web/css-vfx-zflow-screenshot.jpg
 
 [http://css-vfx.googlecode.com/svn/trunk/examples/zflow.html Demo] - (uses flickr photos feed)
 
-[AboutZflow How zflow is built]
-(Description of how zflow is implemented.)
-
- * Setup
- * Reflections
- * Touch controller
- * Clicking
- * Inertia
- * Performance
+[AboutZflow How zflow is built] - Includes comments on setup, reflections, performance, inertia, etc.
 
 == CSS Visual Effects Reference ==
 
