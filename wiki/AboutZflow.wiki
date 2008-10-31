@@ -1,0 +1,14 @@
+#summary How zflow is built and how to use zflow as a component.
+
+= Assembly =
+
+ * Setup
+ * Reflections
+ * Touch controller
+ * Clicking
+ * Inertia
+ * Performance
+
+= Using zflow as a component =
+
+TBD
