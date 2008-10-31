@@ -2,7 +2,9 @@
 
 == Introduction ==
 
-(Extended introduction here)
+Welcome to *css-vfx*, a collection of components and code examples that illustrate the power of CSS Visual Effects. So far, only 1 gem that illustrates a popular RIA user interface demo, "Cover Flow" is currently available. If you'd like to see more, please don't hesitate to suggest something you'd like to see.
+
+Try out the demos, take a look at the source, and have fun! -- [http://www.satine.org/ Charles Ying]
 
 == Gem 1: Cover Flow (zflow) ==
 
