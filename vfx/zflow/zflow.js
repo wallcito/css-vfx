@@ -1,20 +1,44 @@
 /*
-    Copyright (C) 2008 Charles H. Ying. All Rights Reserved.
+    Copyright (C) 2008 Charles Ying. All Rights Reserved.
     
-    http://www.satine.org/
-    
-    This source code is released under the BSD license.
+    This distribution is released under the BSD license.
 
-    See the README for documentation
+    http://css-vfx.googlecode.com/
+    
+    See the README for documentation and license.
 */
 
 (function () {  // Module pattern
 
+var global = this;
+
+/*
+    Utilities (avoid jQuery dependencies)
+*/
+
+function utils_extend(obj, dict)
+{
+    for (var key in dict)
+    {
+        obj[key] = dict[key];
+    }
+}
+
+function utils_setsize(elem, w, h)
+{
+    elem.style.width = w.toString() + "px";
+    elem.style.height = h.toString() + "px";
+}
+
+function utils_setxy(elem, x, y)
+{
+    elem.style.left = Math.round(x).toString() + "px";
+    elem.style.top = Math.round(y).toString() + "px";
+}
+
 /*
     TrayController is a horizontal touch event controller that tracks cumulative offsets and passes events to a delegate. 
 */
-
-var global = this;
 
 TrayController = function ()
 {
@@ -197,10 +221,10 @@ global.zflow = function (images, selector)
 {
     var controller = new TrayController();
     var delegate = new FlowDelegate();
-    var tray = jQuery(selector);
+    var tray = document.querySelector(selector);
 
-    controller.init(tray[0]);
-    delegate.init(tray[0]);
+    controller.init(tray);
+    delegate.init(tray);
 
     controller.delegate = delegate;
 
@@ -214,49 +238,47 @@ global.zflow = function (images, selector)
         opacity: 0,
     }
 
-    jQuery.each(images, function (i, url)
+    images.forEach(function (url, i)
     {
-        var cell = jQuery('<div class="cell"><img /><canvas /></div>');
-        var image = cell.find("img");
-        var canvas = cell.find("canvas");
-        
-        image.attr("src", url);
+        var cell = document.createElement("div");
+        var image = document.createElement("img");
+        var canvas = document.createElement("canvas");
 
-        jQuery(image).load(function ()
+        cell.className = "cell";
+        cell.appendChild(image);
+        cell.appendChild(canvas);
+
+        image.src = url;
+
+        image.addEventListener("load", function ()
         {
             imagesLeft -= 1;
 
-            var iwidth = image[0].width;
-            var iheight = image[0].height;
+            var iwidth = image.width;
+            var iheight = image.height;
             
             var ratio = Math.min(CSIZE / iheight, CSIZE / iwidth);
             
             iwidth *= ratio;
             iheight *= ratio;
 
-            image.width(iwidth);
-            image.height(iheight);
+            utils_setsize(image, iwidth, iheight);
 
-            cell.css(cellCSS);
-            
-            image.css({
-                top: Math.round(CSIZE - iheight) + "px",
-                left: Math.round((CSIZE - iwidth) / 2) + "px",
-            });
-            
-            canvas.css({
-                top: CSIZE + "px",
-                left: Math.round((CSIZE - iwidth) / 2) + "px",
-            });
-            
-            reflect(image[0], iwidth, iheight, canvas[0]);
+            utils_extend(cell.style, cellCSS);
 
-            delegate.setTransformForCell(cell[0], delegate.cells.length, delegate.transformForCell(cell[0], delegate.cells.length, controller.currentX));
-            delegate.cells.push(cell[0]);
+            utils_setxy(image, (CSIZE - iwidth) / 2, CSIZE - iheight);
+            utils_setxy(canvas, (CSIZE - iwidth) / 2, CSIZE);
 
-            tray.append(cell);
+            reflect(image, iwidth, iheight, canvas);
 
-            cell.css({ opacity: 1.0 });
+            delegate.setTransformForCell(cell, delegate.cells.length, delegate.transformForCell(cell, delegate.cells.length, controller.currentX));
+            delegate.cells.push(cell);
+
+            // Start at 0 opacity
+            tray.appendChild(cell);
+
+            // Set to 1 to fade element in.
+            cell.style.opacity = 1.0;
 
             if (imagesLeft == 0)
             {
@@ -265,7 +287,7 @@ global.zflow = function (images, selector)
         });
     });
 
-    tray[0].addEventListener('touchstart', controller, false);
+    tray.addEventListener('touchstart', controller, false);
 }
 
 function reflect(image, iwidth, iheight, canvas)
@@ -274,7 +296,7 @@ function reflect(image, iwidth, iheight, canvas)
     canvas.height = iheight / 2;
 
     var ctx = canvas.getContext("2d");
-    
+
     ctx.save();
 
     ctx.translate(0, iheight - 1);
