@@ -20,3 +20,8 @@ Apple's extensions for iPhone Safari are documented here.
  * [http://webkit.org/specs/CSSVisualEffects/CSSTransforms.html CSS 3D Transforms]
  * [http://webkit.org/specs/CSSVisualEffects/CSSTransitions.html CSS Transitions]
  * [http://webkit.org/specs/CSSVisualEffects/CSSAnimation.html CSS Animation]
+
+== Contributors ==
+
+Marshall Elfstrand - http://www.vengefulcow.com/
+ * Remove jQuery dependencies from zflow.js
