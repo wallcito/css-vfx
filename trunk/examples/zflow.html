@@ -30,7 +30,7 @@
 
 <body class="zflow">
 
-<div class="centering portrait">
+<div class="centering">
     <div id="tray" class="tray"></div>
 </div>
 
@@ -38,6 +38,8 @@
 
 jQuery(window).load(function ()
 {
+    window.onorientationchange(null);
+
     flickr(function (images)
     {
         zflow(images, "#tray");
