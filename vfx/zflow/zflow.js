@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2008 Charles Ying. All Rights Reserved.
+    Copyright (C) 2008, 2009 Charles Ying. All Rights Reserved.
     
     This distribution is released under the BSD license.
 
@@ -312,7 +312,7 @@ function reflect(image, iwidth, iheight, canvas)
     gradient.addColorStop(0, "rgba(255, 255, 255, 0.5)");
     
     ctx.fillStyle = gradient;
-    ctx.fill();
+    ctx.fillRect(0, 0, iwidth, iheight / 2);
 }
 
 })();
