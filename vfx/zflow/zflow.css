@@ -22,7 +22,7 @@
 */
     -webkit-perspective: 600;
     -webkit-transform-style: preserve-3d;
-    -webkit-transform: translateZ(0px);
+    -webkit-transform: translate3d(0, 0, 0);
 }
 
 .zflow div.tray
@@ -32,7 +32,7 @@
     top: 50%;
     
     -webkit-transform-style: preserve-3d;
-    -webkit-transform: translateX(0px);
+    -webkit-transform: translate3d(0, 0, 0);
 
     -webkit-transition-property: -webkit-transform;
     -webkit-transition-duration: 0.4s;
@@ -43,7 +43,7 @@
 {
     position: absolute;
     -webkit-transform-style: preserve-3d;
-    -webkit-transform: translateX(0px);
+    -webkit-transform: translate3d(0, 0, 0);
 
     -webkit-transition-property: -webkit-transform opacity;
     -webkit-transition-duration: 0.4s;

@@ -114,7 +114,7 @@ const FLOW_XGAP = CSIZE / 3;
 
 const T_NEG_ANGLE = "rotateY(" + (- FLOW_ANGLE) + "deg)";
 const T_ANGLE = "rotateY(" + FLOW_ANGLE + "deg)";
-const T_ZFOCUS = "translateZ(" + FLOW_ZFOCUS + "px)";
+const T_ZFOCUS = "translate3d(0, 0, " + FLOW_ZFOCUS + "px)";
 
 FlowDelegate = function ()
 {
@@ -147,7 +147,7 @@ FlowDelegate.prototype.clicked = function (currentX)
 
     if ((this.lastFocus == undefined) || this.lastFocus != i)
     {
-        transform += " translateZ(150px) rotateY(180deg)";
+        transform += " translate3d(0, 0, 150px) rotateY(180deg)";
         this.lastFocus = i;
     }
     else
@@ -179,17 +179,17 @@ FlowDelegate.prototype.transformForCell = function (cell, i, offset)
     if ((ix < FLOW_THRESHOLD) && (ix >= -FLOW_THRESHOLD))
     {
         // yangle = 0, zpos = FLOW_ZFOCUS
-        return T_ZFOCUS + " translateX(" + x + "px)";
+        return T_ZFOCUS + " translate3d(" + x + "px, 0, 0)";
     }
     else if (ix > 0)
     {
         // yangle = -FLOW_ANGLE, x + FLOW_XGAP
-        return "translateX(" + (x + FLOW_XGAP) + "px) " + T_NEG_ANGLE;
+        return "translate3d(" + (x + FLOW_XGAP) + "px, 0, 0) " + T_NEG_ANGLE;
     }
     else
     {
         // yangle = FLOW_ANGLE, x - FLOW_XGAP
-        return "translateX(" + (x - FLOW_XGAP) + "px) " + T_ANGLE;
+        return "translate3d(" + (x - FLOW_XGAP) + "px, 0, 0) " + T_ANGLE;
     }
 }
 
@@ -204,7 +204,7 @@ FlowDelegate.prototype.setTransformForCell = function (cell, i, transform)
 
 FlowDelegate.prototype.update = function (currentX)
 {
-    this.elem.style.webkitTransform = "translateX(" + (currentX) + "px)";
+    this.elem.style.webkitTransform = "translate3d(" + (currentX) + "px, 0, 0)";
 
     /*
         It would be nice if we only updated dirty cells... for now, we use a cache
