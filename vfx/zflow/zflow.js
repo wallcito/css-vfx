@@ -288,6 +288,23 @@ global.zflow = function (images, selector)
     });
 
     tray.addEventListener('touchstart', controller, false);
+
+	/* Limited keyboard support for now */
+	window.addEventListener('keydown', function (e)
+	{
+		if (e.keyCode == 37)
+		{
+			/* Left Arrow */
+			controller.currentX += CGAP;
+			delegate.updateTouchEnd(controller);
+		}
+		else if (e.keyCode == 39)
+		{
+			/* Right Arrow */
+			controller.currentX -= CGAP;
+			delegate.updateTouchEnd(controller);
+		}
+	});
 }
 
 function reflect(image, iwidth, iheight, canvas)
