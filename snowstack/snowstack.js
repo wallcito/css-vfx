@@ -18,7 +18,7 @@ var CYSPACING;
 var CROWS = 3;
 
 var snowstack_options = {
-	captions: true
+	captions: false
 };
 
 function translate3d(x, y, z)
@@ -27,7 +27,7 @@ function translate3d(x, y, z)
 }
 
 var vfx = {
-	elem: function (name, attrs)
+	elem: function (name, attrs, child)
 	{
 		var e = document.createElement(name);
 		if (attrs)
@@ -37,11 +37,20 @@ var vfx = {
 				e.setAttribute(key, attrs[key]);
 			}
 		}
+		
+		if (child)
+		{
+			e.appendChild(child);
+		}
 		return e;
 	},
 	query: function (selectors)
 	{
 		return document.querySelector(selectors);
+	},
+	attach: function (elem, callback)
+	{
+		elem.addEventListener("load", callback, false);
 	}
 };
 
@@ -107,9 +116,9 @@ function refreshImage(elem, cell)
 	
 	zoomTimer = setTimeout(function ()
 	{
-    	var zoomImage = vfx.elem('img', { "class": "zoom" });
+    	var zoomImage = vfx.elem('img');
 
-		jQuery(zoomImage).load(function ()
+		vfx.attach(zoomImage, function ()
 		{
 			layoutImageInCell(zoomImage, cell.div);
 			if (elem && elem.parentNode)
@@ -228,32 +237,30 @@ function snowstack_addimage(reln, info)
 
 	var img = vfx.elem("img");
 
-	jQuery(img).load(function ()
+	vfx.attach(img, function ()
 	{
 		layoutImageInCell(img, cell.div);
 		img.style.opacity = 0;
-		var anchor = vfx.elem("a", { "class": "mover viewflat", "href": cell.info.link, "target": "_blank" });
-		anchor.appendChild(img);
-		cell.div.appendChild(anchor);
+		cell.div.appendChild(vfx.elem("a", { "class": "mover viewflat", "href": cell.info.link, "target": "_blank" }, img));
 		img.style.opacity = 1;
 	});
 	
 	img.src = info.thumb;
 
-	jQuery("#stack").append(cell.div);
+	vfx.query("#stack").appendChild(cell.div);
 
 	if (y == (CROWS - 1))
 	{
-		cell.reflection = jQuery('<div class="cell view reflection" style="width: ' + CWIDTH + 'px; height: ' + CHEIGHT + 'px"></div>')[0];
+		cell.reflection = vfx.elem("div", { "class": "cell view reflection", "style": 'width: ' + CWIDTH + 'px; height: ' + CHEIGHT + 'px' });
 		cell.reflection.style.webkitTransform = translate3d(x * CXSPACING, y * CYSPACING, 0);
 
-		var rimg = document.createElement("img");
+		var rimg = vfx.elem("img");
 	
-		jQuery(rimg).load(function ()
+		vfx.attach(rimg, function ()
 		{
 			layoutImageInCell(rimg, cell.reflection);
 			rimg.style.opacity = 0;
-			cell.reflection.appendChild(jQuery('<div class="mover viewflat"></div>').append(rimg)[0]);
+			cell.reflection.appendChild(vfx.elem("div", { "class": "mover viewflat" }, rimg));
 			rimg.style.opacity = 1;
 		});
 	
