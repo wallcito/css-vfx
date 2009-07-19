@@ -125,6 +125,7 @@ function refreshImage(elem, cell)
 	
 	zoomTimer = setTimeout(function ()
 	{
+/*
     	var zoomImage = vfx.elem('img');
 
 		vfx.attach(zoomImage, function ()
@@ -140,10 +141,10 @@ function refreshImage(elem, cell)
 		zoomImage.src = cell.info.zoom;
 
 		zoomTimer = null;
-/*
+*/
 		elem.src = cell.info.zoom;
 		cell.iszoomed = true;
-*/
+		zoomTimer = null;
 	}, 2000);
 }
 
