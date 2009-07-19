@@ -10,14 +10,7 @@
     -webkit-transform-style: preserve-3d;
 }
 
-.fader
-{
-	-webkit-transition-property: opacity;
-	-webkit-transition-duration: 550ms;
-	-webkit-transition-timing-function: ease-in-out;
-}
-
-.page
+div.page
 {
     -webkit-perspective: 600;
 	width: 100%;
@@ -32,7 +25,7 @@ div.origin
 	top: 50%;
 }
 
-div#camera
+div.camera
 {
 	-webkit-transition-property: -webkit-transform;
 	-webkit-transition-duration: 5s;
@@ -40,7 +33,7 @@ div#camera
 	-webkit-transform: translate3d(0, 0, 0);
 }
 
-div#dolly
+div.dolly
 {
 	-webkit-transition-property: -webkit-transform;
 	-webkit-transition-duration: 550ms;
