@@ -109,9 +109,15 @@ function refreshImage(elem, cell)
 		return;
 	}
 
+	if (elem.src === cell.info.zoom)
+	{
+		return;
+	}
+
 	if (zoomTimer)
 	{
 		clearTimeout(zoomTimer);
+		zoomTimer = null;
 	}
 	
 	zoomTimer = setTimeout(function ()
@@ -245,7 +251,7 @@ function snowstack_addimage(reln, info)
 	{
 		layoutImageInCell(cell.divimage, cell.div);
 		cell.divimage.style.opacity = 0;
-		cell.div.appendChild(vfx.elem("a", { "class": "mover viewflat", "href": cell.info.link, "target": "_blank" }, cell.divimage));
+		cell.div.appendChild(vfx.elem("a", { "class": "mover view", "href": cell.info.link, "target": "_blank" }, cell.divimage));
 		cell.divimage.style.opacity = 1;
 	});
 	
@@ -264,7 +270,7 @@ function snowstack_addimage(reln, info)
 		{
 			layoutImageInCell(cell.reflectionimage, cell.reflection);
 			cell.reflectionimage.style.opacity = 0;
-			cell.reflection.appendChild(vfx.elem("div", { "class": "mover viewflat" }, cell.reflectionimage));
+			cell.reflection.appendChild(vfx.elem("div", { "class": "mover view" }, cell.reflectionimage));
 			cell.reflectionimage.style.opacity = 1;
 		});
 	
