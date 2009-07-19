@@ -54,7 +54,7 @@ var vfx = {
 	}
 };
 
-var currentCell = -1;
+var currentCellIndex = -1;
 
 var cells = [];
 
@@ -136,33 +136,30 @@ function refreshImage(elem, cell)
 
 function snowstack_update(newIndex, newmagnifymode)
 {
-	if (currentCell == newIndex && magnifyMode == newmagnifymode)
+	if (currentCellIndex == newIndex && magnifyMode == newmagnifymode)
 	{
 		return;
 	}
 
-	var oldIndex = currentCell;
-	newIndex = Math.min(Math.max(newIndex, 0), cells.length - 1);
-	currentCell = newIndex;
+	var oldIndex = currentCellIndex;
 
 	if (oldIndex != -1)
 	{
 		var oldCell = cells[oldIndex];
-		jQuery(oldCell.div).removeClass("selected").removeClass("magnify");
+		
+		oldCell.div.className = "cell view";
+
 		if (oldCell.reflection)
 		{
-			jQuery(oldCell.reflection).removeClass("selected");
+			oldCell.reflection.className = "cell view reflection";
 		}
 	}
 	
-	var cell = cells[newIndex];
-	jQuery(cell.div).addClass("selected");
-	
-	if (cell.reflection)
-	{
-		jQuery(cell.reflection).addClass("selected");
-	}
+	newIndex = Math.min(Math.max(newIndex, 0), cells.length - 1);
+	currentCellIndex = newIndex;
 
+	var cell = cells[newIndex];
+	
 	magnifyMode = newmagnifymode;
 	
 	if (magnifyMode)
@@ -177,11 +174,18 @@ function snowstack_update(newIndex, newmagnifymode)
 			jQuery(caption).text(cell.info.title)[0].style.opacity = 1;
 		}
 
-		jQuery(cell.div).addClass("magnify");
-		refreshImage(jQuery(cell.div).find("img")[0], cell);
+		cell.div.className = "cell view magnify";
+		refreshImage(cell.divimage, cell);
 	}
 	else
 	{
+		cell.div.className = "cell view selected";
+		
+		if (cell.reflection)
+		{
+			cell.reflection.className = "cell view reflection selected";
+		}
+		
 		if (snowstack_options.captions)
 		{
 			caption.style.opacity = 0;
@@ -232,20 +236,20 @@ function snowstack_addimage(reln, info)
 
 	cell.info = info;
 
-	cell.div = vfx.elem("div", { "class": "cell view original", "style": 'width: ' + CWIDTH + 'px; height: ' + CHEIGHT + 'px' });
+	cell.div = vfx.elem("div", { "class": "cell view", "style": 'width: ' + CWIDTH + 'px; height: ' + CHEIGHT + 'px' });
 	cell.div.style.webkitTransform = translate3d(x * CXSPACING, y * CYSPACING, 0);
 
-	var img = vfx.elem("img");
+	cell.divimage = vfx.elem("img");
 
-	vfx.attach(img, function ()
+	vfx.attach(cell.divimage, function ()
 	{
-		layoutImageInCell(img, cell.div);
-		img.style.opacity = 0;
-		cell.div.appendChild(vfx.elem("a", { "class": "mover viewflat", "href": cell.info.link, "target": "_blank" }, img));
-		img.style.opacity = 1;
+		layoutImageInCell(cell.divimage, cell.div);
+		cell.divimage.style.opacity = 0;
+		cell.div.appendChild(vfx.elem("a", { "class": "mover viewflat", "href": cell.info.link, "target": "_blank" }, cell.divimage));
+		cell.divimage.style.opacity = 1;
 	});
 	
-	img.src = info.thumb;
+	cell.divimage.src = info.thumb;
 
 	vfx.query("#stack").appendChild(cell.div);
 
@@ -254,17 +258,17 @@ function snowstack_addimage(reln, info)
 		cell.reflection = vfx.elem("div", { "class": "cell view reflection", "style": 'width: ' + CWIDTH + 'px; height: ' + CHEIGHT + 'px' });
 		cell.reflection.style.webkitTransform = translate3d(x * CXSPACING, y * CYSPACING, 0);
 
-		var rimg = vfx.elem("img");
+		cell.reflectionimage = vfx.elem("img");
 	
-		vfx.attach(rimg, function ()
+		vfx.attach(cell.reflectionimage, function ()
 		{
-			layoutImageInCell(rimg, cell.reflection);
-			rimg.style.opacity = 0;
-			cell.reflection.appendChild(vfx.elem("div", { "class": "mover viewflat" }, rimg));
-			rimg.style.opacity = 1;
+			layoutImageInCell(cell.reflectionimage, cell.reflection);
+			cell.reflectionimage.style.opacity = 0;
+			cell.reflection.appendChild(vfx.elem("div", { "class": "mover viewflat" }, cell.reflectionimage));
+			cell.reflectionimage.style.opacity = 1;
 		});
 	
-		rimg.src = info.thumb;
+		cell.reflectionimage.src = info.thumb;
 
 		vfx.query("#rstack").appendChild(cell.reflection);
 	}
@@ -297,21 +301,21 @@ function snowstack_init(imagefun)
     
     function updatekeys()
     {
-    	var newcell = currentCell;
+    	var newCellIndex = currentCellIndex;
 		if (keys.left)
 		{
 			/* Left Arrow */
-			if (newcell >= CROWS)
+			if (newCellIndex >= CROWS)
 			{
-				newcell -= CROWS;
+				newCellIndex -= CROWS;
 			}
 		}
 		if (keys.right)
 		{
 			/* Right Arrow */
-			if ((newcell + CROWS) < cells.length)
+			if ((newCellIndex + CROWS) < cells.length)
 			{
-				newcell += CROWS;
+				newCellIndex += CROWS;
 			}
 			else if (!loading)
 			{
@@ -328,15 +332,15 @@ function snowstack_init(imagefun)
 		if (keys.up)
 		{
 			/* Up Arrow */
-			newcell -= 1;
+			newCellIndex -= 1;
 		}
 		if (keys.down)
 		{
 			/* Down Arrow */
-			newcell += 1;
+			newCellIndex += 1;
 		}
 
-		snowstack_update(newcell, magnifyMode);
+		snowstack_update(newCellIndex, magnifyMode);
     }
     
 	var delay = 330;
@@ -370,7 +374,7 @@ function snowstack_init(imagefun)
 		if (e.keyCode == 32)
 		{
 			/* Magnify toggle with spacebar */
-			snowstack_update(currentCell, !magnifyMode);
+			snowstack_update(currentCellIndex, !magnifyMode);
 		}
 		else
 		{
