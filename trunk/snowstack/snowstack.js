@@ -51,7 +51,7 @@ var vfx = {
 	{
 		return document.querySelector(selectors);
 	},
-	attach: function (elem, callback)
+	loadback: function (elem, callback)
 	{
 		elem.addEventListener("load", callback, false);
 	}
@@ -128,7 +128,7 @@ function refreshImage(elem, cell)
 /*
     	var zoomImage = vfx.elem('img');
 
-		vfx.attach(zoomImage, function ()
+		vfx.loadback(zoomImage, function ()
 		{
 			layoutImageInCell(zoomImage, cell.div);
 			if (elem && elem.parentNode)
@@ -255,7 +255,7 @@ function snowstack_addimage(reln, info)
 
 	cell.divimage = vfx.elem("img");
 
-	vfx.attach(cell.divimage, function ()
+	vfx.loadback(cell.divimage, function ()
 	{
 		layoutImageInCell(cell.divimage, cell.div);
 		cell.divimage.style.opacity = 0;
@@ -274,7 +274,7 @@ function snowstack_addimage(reln, info)
 
 		cell.reflectionimage = vfx.elem("img");
 	
-		vfx.attach(cell.reflectionimage, function ()
+		vfx.loadback(cell.reflectionimage, function ()
 		{
 			layoutImageInCell(cell.reflectionimage, cell.reflection);
 			cell.reflectionimage.style.opacity = 0;
