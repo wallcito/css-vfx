@@ -26,14 +26,34 @@ function translate3d(x, y, z)
 	return "translate3d(" + x + "px, " + y + "px, " + z + "px)";
 }
 
+var vfx = {
+	elem: function (name, attrs)
+	{
+		var e = document.createElement(name);
+		if (attrs)
+		{
+			for (var key in attrs)
+			{
+				e.setAttribute(key, attrs[key]);
+			}
+		}
+		return e;
+	},
+	query: function (selectors)
+	{
+		return document.querySelector(selectors);
+	}
+};
+
 var currentCell = -1;
 
 var cells = [];
 
 var currentTimer = null;
 
-var dolly = jQuery("#dolly")[0];
-var camera = jQuery("#camera")[0];
+var dolly = vfx.query("#dolly");
+var camera = vfx.query("#camera");
+var caption = vfx.query("#caption");
 
 var magnifyMode = false;
 var newbieUser = true;
@@ -87,16 +107,16 @@ function refreshImage(elem, cell)
 	
 	zoomTimer = setTimeout(function ()
 	{
-    	var zoomImage = jQuery('<img class="zoom"></img>');
+    	var zoomImage = vfx.elem('img', { "class": "zoom" });
 
-		zoomImage.load(function ()
+		jQuery(zoomImage).load(function ()
 		{
-			layoutImageInCell(zoomImage[0], cell.div[0]);
-			elem.parentNode.replaceChild(zoomImage[0], elem);
+			layoutImageInCell(zoomImage, cell.div[0]);
+			elem.parentNode.replaceChild(zoomImage, elem);
 			cell.iszoomed = true;
 		});
 
-		zoomImage.attr("src", cell.info.zoom);
+		zoomImage.src = cell.info.zoom;
 
 		zoomTimer = null;
 	}, 2000);
@@ -119,7 +139,7 @@ function snowstack_update(newIndex, newmagnifymode)
 		oldCell.div.removeClass("selected").removeClass("magnify");
 		if (oldCell.reflection)
 		{
-			oldCell.reflection.removeClass("selected");
+			jQuery(oldCell.reflection).removeClass("selected");
 		}
 	}
 	
@@ -128,7 +148,7 @@ function snowstack_update(newIndex, newmagnifymode)
 	
 	if (cell.reflection)
 	{
-		cell.reflection.addClass("selected");
+		jQuery(cell.reflection).addClass("selected");
 	}
 
 	magnifyMode = newmagnifymode;
@@ -142,7 +162,7 @@ function snowstack_update(newIndex, newmagnifymode)
 		
 		if (snowstack_options.captions)
 		{
-			jQuery("#caption").text(cell.info.title)[0].style.opacity = 1;
+			jQuery(caption).text(cell.info.title)[0].style.opacity = 1;
 		}
 
 		cell.div.addClass("magnify");
@@ -152,7 +172,7 @@ function snowstack_update(newIndex, newmagnifymode)
 	{
 		if (snowstack_options.captions)
 		{
-			jQuery("#caption")[0].style.opacity = 0;
+			caption.style.opacity = 0;
 		}
 	}
 
@@ -162,7 +182,7 @@ function snowstack_update(newIndex, newmagnifymode)
 		
 		if (snowstack_options.captions)
 		{
-			jQuery("#caption")[0].style.opacity = 0;
+			caption.style.opacity = 0;
 		}
 	}
 
@@ -203,7 +223,7 @@ function snowstack_addimage(reln, info)
 	cell.div = jQuery('<div class="cell view original" style="width: ' + CWIDTH + 'px; height: ' + CHEIGHT + 'px"></div>');
 	cell.div[0].style.webkitTransform = translate3d(x * CXSPACING, y * CYSPACING, 0);
 
-	var img = document.createElement("img");
+	var img = vfx.elem("img");
 
 	jQuery(img).load(function ()
 	{
@@ -219,22 +239,22 @@ function snowstack_addimage(reln, info)
 
 	if (y == (CROWS - 1))
 	{
-		cell.reflection = jQuery('<div class="cell view reflection" style="width: ' + CWIDTH + 'px; height: ' + CHEIGHT + 'px"></div>');
-		cell.reflection[0].style.webkitTransform = translate3d(x * CXSPACING, y * CYSPACING, 0);
-	
+		cell.reflection = jQuery('<div class="cell view reflection" style="width: ' + CWIDTH + 'px; height: ' + CHEIGHT + 'px"></div>')[0];
+		cell.reflection.style.webkitTransform = translate3d(x * CXSPACING, y * CYSPACING, 0);
+
 		var rimg = document.createElement("img");
 	
 		jQuery(rimg).load(function ()
 		{
-			layoutImageInCell(rimg, cell.reflection[0]);
+			layoutImageInCell(rimg, cell.reflection);
 			rimg.style.opacity = 0;
-			cell.reflection.append(jQuery('<div class="mover viewflat"></div>').append(rimg));
+			cell.reflection.appendChild(jQuery('<div class="mover viewflat"></div>').append(rimg)[0]);
 			rimg.style.opacity = 1;
 		});
 	
 		rimg.src = info.thumb;
 
-		jQuery("#rstack").append(cell.reflection);
+		vfx.query("#rstack").appendChild(cell.reflection);
 	}
 }
 
@@ -248,7 +268,7 @@ function snowstack_init(imagefun)
 	CXSPACING = CWIDTH + CGAP;
 	CYSPACING = CHEIGHT + CGAP;
 
-	jQuery("#mirror")[0].style.webkitTransform = "scaleY(-1.0) " + translate3d(0, - CYSPACING * (CROWS * 2) - 1, 0);
+	vfx.query("#mirror").style.webkitTransform = "scaleY(-1.0) " + translate3d(0, - CYSPACING * (CROWS * 2) - 1, 0);
 
     imagefun(function (images)
     {
