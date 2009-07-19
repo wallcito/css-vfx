@@ -18,7 +18,8 @@ var CYSPACING;
 var CROWS = 3;
 
 var snowstack_options = {
-	captions: true
+	refreshzoom: false,
+	captions: false
 };
 
 function translate3d(x, y, z)
@@ -47,9 +48,9 @@ var vfx = {
 		}
 		return e;
 	},
-	query: function (selectors)
+	byid: function (id)
 	{
-		return document.querySelector(selectors);
+		return document.getElementById(id);
 	},
 	loadback: function (elem, callback)
 	{
@@ -63,11 +64,11 @@ var cells = [];
 
 var currentTimer = null;
 
-var dolly = vfx.query("#dolly");
-var camera = vfx.query("#camera");
-var caption = vfx.query("#caption");
+var dolly = vfx.byid("dolly");
+var camera = vfx.byid("camera");
+var caption = vfx.byid("caption");
 
-var magnifyMode = false;
+var magnifyMode;
 var newbieUser = true;
 
 var zoomTimer = null;
@@ -120,6 +121,7 @@ function refreshImage(elem, cell)
 	zoomTimer = setTimeout(function ()
 	{
 		elem.src = cell.info.zoom;
+
 		zoomTimer = null;
 	}, 2000);
 }
@@ -130,24 +132,26 @@ function snowstack_update(newIndex, newmagnifymode)
 	{
 		return;
 	}
+	
+	function setcellclass(c, name)
+	{
+		c.div.className = name;
+		if (c.reflection)
+		{
+			c.reflection.className = name;
+		}
+	}
 
 	if (currentCellIndex != -1)
 	{
-		var oldCell = cells[currentCellIndex];
-		
-		oldCell.div.className = "cell";
-
-		if (oldCell.reflection)
-		{
-			oldCell.reflection.className = "cell reflection";
-		}
+		setcellclass(cells[currentCellIndex], "cell");
 	}
 	
 	newIndex = Math.min(Math.max(newIndex, 0), cells.length - 1);
 	currentCellIndex = newIndex;
 
 	var cell = cells[newIndex];
-	
+
 	magnifyMode = newmagnifymode;
 	
 	if (magnifyMode)
@@ -162,18 +166,21 @@ function snowstack_update(newIndex, newmagnifymode)
 			caption.innerText = cell.info.title;
 			caption.style.opacity = 1;
 		}
+		else if (caption)
+		{
+			caption.style.opacity = 0;
+		}
 
 		cell.div.className = "cell magnify";
-		refreshImage(cell.divimage, cell);
+		
+		if (snowstack_options.refreshzoom)
+		{
+			refreshImage(cell.divimage, cell);
+		}
 	}
 	else
 	{
-		cell.div.className = "cell selected";
-		
-		if (cell.reflection)
-		{
-			cell.reflection.className = "cell reflection selected";
-		}
+		setcellclass(cell, "cell selected");
 		
 		if (snowstack_options.captions)
 		{
@@ -198,9 +205,9 @@ function snowstack_update(newIndex, newmagnifymode)
 	
 	var dx = currentMatrix.e - targetMatrix.e;
 	var angle = Math.min(Math.max(dx / (CXSPACING * 3.0), -1), 1) * 45;
-	
-	camera.style.webkitTransform = "rotateY(" + angle + "deg)";
+
 	camera.style.webkitTransitionDuration = "330ms";
+	camera.style.webkitTransform = "rotateY(" + angle + "deg)";
 
 	if (currentTimer)
 	{
@@ -238,16 +245,15 @@ function snowstack_addimage(info)
 		cell.divimage.style.opacity = 1;
 	});
 	
+	vfx.byid("stack").appendChild(cell.div);
 	cell.divimage.src = info.thumb;
-
-	vfx.query("#stack").appendChild(cell.div);
 
 	if (y == (CROWS - 1))
 	{
-		cell.reflection = vfx.elem("div", { "class": "cell reflection", "style": 'width: ' + CWIDTH + 'px; height: ' + CHEIGHT + 'px' });
+		cell.reflection = vfx.elem("div", { "class": "cell", "style": 'width: ' + CWIDTH + 'px; height: ' + CHEIGHT + 'px' });
 		cell.reflection.style.webkitTransform = translate3d(x * CXSPACING, y * CYSPACING, 0);
 
-		cell.reflectionimage = vfx.elem("img");
+		cell.reflectionimage = vfx.elem("img", { "class": "reflection" });
 	
 		vfx.loadback(cell.reflectionimage, function ()
 		{
@@ -257,9 +263,8 @@ function snowstack_addimage(info)
 			cell.reflectionimage.style.opacity = 1;
 		});
 	
+		vfx.byid("rstack").appendChild(cell.reflection);
 		cell.reflectionimage.src = info.thumb;
-
-		vfx.query("#rstack").appendChild(cell.reflection);
 	}
 }
 
@@ -273,12 +278,12 @@ function snowstack_init(imagefun)
 	CXSPACING = CWIDTH + CGAP;
 	CYSPACING = CHEIGHT + CGAP;
 
-	vfx.query("#mirror").style.webkitTransform = "scaleY(-1.0) " + translate3d(0, - CYSPACING * (CROWS * 2) - 1, 0);
+	vfx.byid("mirror").style.webkitTransform = "scaleY(-1.0) " + translate3d(0, - CYSPACING * (CROWS * 2) - 1, 0);
 
     imagefun(function (images)
     {
     	images.forEach(snowstack_addimage);
-		snowstack_update(Math.floor(CROWS / 2));
+		snowstack_update(Math.floor(CROWS / 2), false);
     	loading = false;
     }, page);
     

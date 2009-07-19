@@ -55,7 +55,7 @@ div#dolly
 	-webkit-transform: translate3d(0, 0, 0);
 }
 
-div.cell.reflection img
+img.reflection
 {
 	-webkit-mask-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.25, transparent), color-stop(1.0, rgba(255, 255, 255, 0.5)));
 }
@@ -111,11 +111,6 @@ div.magnify .mover
 div.magnify img
 {
 	-webkit-transform: scale(2.0);
-}
-
-div.reflection.selected .mover
-{
-	-webkit-transform: translate3d(0, 0, 39px);
 }
 
 #caption
