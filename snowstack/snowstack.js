@@ -1,5 +1,8 @@
-/*
+// (function () {  // Module pattern
 
+var global = this;
+
+/*
 	Copyright (C) 2009 Charles Ying. All Rights Reserved.
 	This source code is available under Apache License 2.0.
 	
@@ -7,7 +10,6 @@
 		on leopard, animating transforms with a transform list > 1 function, animation falls back to software
 		shadows (and animated shadows) plus border animations can cause additional redraws
 		offsetWidth / offsetHeight should be avoided.
-
 */
 
 var CWIDTH;
@@ -273,7 +275,7 @@ function snowstack_addimage(info)
 	}
 }
 
-function snowstack_init(imagefun, options)
+global.snowstack_init = function (imagefun, options)
 {
 	var loading = true;
 	
@@ -415,3 +417,4 @@ function snowstack_init(imagefun, options)
 	});
 }
 
+//})(); // end module pattern
