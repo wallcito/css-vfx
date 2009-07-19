@@ -34,7 +34,7 @@ var vfx = {
 		{
 			for (var key in attrs)
 			{
-				if (e.hasOwnProperty(key))
+				if (attrs.hasOwnProperty(key))
 				{
 					e.setAttribute(key, attrs[key]);
 				}
@@ -140,6 +140,10 @@ function refreshImage(elem, cell)
 		zoomImage.src = cell.info.zoom;
 
 		zoomTimer = null;
+/*
+		elem.src = cell.info.zoom;
+		cell.iszoomed = true;
+*/
 	}, 2000);
 }
 
