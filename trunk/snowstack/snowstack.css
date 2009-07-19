@@ -74,7 +74,7 @@ div.cell img
 	display: block;
 	position: absolute;
 
-	-webkit-transition-property: -webkit-transform opacity /* PERF -webkit-box-shadow */ /* border-color */;
+	-webkit-transition-property: -webkit-transform opacity/* PERF -webkit-box-shadow */ /* border-color */;
 	-webkit-transition-duration: 550ms;
 	-webkit-transform: translate3d(0, 0, 0);
 }
