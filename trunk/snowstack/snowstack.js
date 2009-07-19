@@ -111,8 +111,11 @@ function refreshImage(elem, cell)
 
 		jQuery(zoomImage).load(function ()
 		{
-			layoutImageInCell(zoomImage, cell.div[0]);
-			elem.parentNode.replaceChild(zoomImage, elem);
+			layoutImageInCell(zoomImage, cell.div);
+			if (elem && elem.parentNode)
+			{
+				elem.parentNode.replaceChild(zoomImage, elem);
+			}
 			cell.iszoomed = true;
 		});
 
@@ -136,7 +139,7 @@ function snowstack_update(newIndex, newmagnifymode)
 	if (oldIndex != -1)
 	{
 		var oldCell = cells[oldIndex];
-		oldCell.div.removeClass("selected").removeClass("magnify");
+		jQuery(oldCell.div).removeClass("selected").removeClass("magnify");
 		if (oldCell.reflection)
 		{
 			jQuery(oldCell.reflection).removeClass("selected");
@@ -144,7 +147,7 @@ function snowstack_update(newIndex, newmagnifymode)
 	}
 	
 	var cell = cells[newIndex];
-	cell.div.addClass("selected");
+	jQuery(cell.div).addClass("selected");
 	
 	if (cell.reflection)
 	{
@@ -165,8 +168,8 @@ function snowstack_update(newIndex, newmagnifymode)
 			jQuery(caption).text(cell.info.title)[0].style.opacity = 1;
 		}
 
-		cell.div.addClass("magnify");
-		refreshImage(cell.div.find("img")[0], cell);
+		jQuery(cell.div).addClass("magnify");
+		refreshImage(jQuery(cell.div).find("img")[0], cell);
 	}
 	else
 	{
@@ -220,16 +223,18 @@ function snowstack_addimage(reln, info)
 
 	cell.info = info;
 
-	cell.div = jQuery('<div class="cell view original" style="width: ' + CWIDTH + 'px; height: ' + CHEIGHT + 'px"></div>');
-	cell.div[0].style.webkitTransform = translate3d(x * CXSPACING, y * CYSPACING, 0);
+	cell.div = vfx.elem("div", { "class": "cell view original", "style": 'width: ' + CWIDTH + 'px; height: ' + CHEIGHT + 'px' });
+	cell.div.style.webkitTransform = translate3d(x * CXSPACING, y * CYSPACING, 0);
 
 	var img = vfx.elem("img");
 
 	jQuery(img).load(function ()
 	{
-		layoutImageInCell(img, cell.div[0]);
+		layoutImageInCell(img, cell.div);
 		img.style.opacity = 0;
-		cell.div.append(jQuery('<a class="mover viewflat" href="' + cell.info.link + '" target="_blank"></a>').append(img));
+		var anchor = vfx.elem("a", { "class": "mover viewflat", "href": cell.info.link, "target": "_blank" });
+		anchor.appendChild(img);
+		cell.div.appendChild(anchor);
 		img.style.opacity = 1;
 	});
 	
