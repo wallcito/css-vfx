@@ -34,7 +34,10 @@ var vfx = {
 		{
 			for (var key in attrs)
 			{
-				e.setAttribute(key, attrs[key]);
+				if (e.hasOwnProperty(key))
+				{
+					e.setAttribute(key, attrs[key]);
+				}
 			}
 		}
 		
