@@ -62,6 +62,8 @@ div.cell.reflection img
 
 div.cell
 {
+	position: absolute;
+	-webkit-transform-style: preserve-3d;
 	-webkit-transition-property: -webkit-transform opacity;
 	-webkit-transition-duration: 550ms;
 	-webkit-transform: translate3d(0, 0, 0);
