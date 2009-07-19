@@ -206,8 +206,8 @@ function snowstack_update(newIndex, newmagnifymode)
 	var dx = currentMatrix.e - targetMatrix.e;
 	var angle = Math.min(Math.max(dx / (CXSPACING * 3.0), -1), 1) * 45;
 
-	camera.style.webkitTransitionDuration = "330ms";
 	camera.style.webkitTransform = "rotateY(" + angle + "deg)";
+	camera.style.webkitTransitionDuration = "330ms";
 
 	if (currentTimer)
 	{
