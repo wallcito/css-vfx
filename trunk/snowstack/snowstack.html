@@ -69,6 +69,7 @@ function flickr(callback, page)
                 title: item.ownername + " / " + item.title,
             	thumb: item.url_s,
             	zoom: 'http://farm' + item.farm + '.static.flickr.com/' + item.server + '/' + item.id + '_' + item.secret + '.jpg',
+//            	thumb: 'http://farm' + item.farm + '.static.flickr.com/' + item.server + '/' + item.id + '_' + item.secret + '.jpg',
             	link: 'http://www.flickr.com/photos/' + item.owner + '/' + item.id
             };
         });
