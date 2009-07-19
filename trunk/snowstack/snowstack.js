@@ -1,12 +1,12 @@
 /*
 
-    Copyright (C) 2009 Charles Ying. All Rights Reserved.
-    This source code is available under Apache License 2.0.
-    
-    Performance Notes (courtesy of Apple):
-    	on leopard, animating transforms with a transform list > 1 function, animation falls back to software
-    	shadows (and animated shadows) plus border animations can cause additional redraws
-    	offsetWidth / offsetHeight should be avoided.
+	Copyright (C) 2009 Charles Ying. All Rights Reserved.
+	This source code is available under Apache License 2.0.
+	
+	Performance Notes (courtesy of Apple):
+		on leopard, animating transforms with a transform list > 1 function, animation falls back to software
+		shadows (and animated shadows) plus border animations can cause additional redraws
+		offsetWidth / offsetHeight should be avoided.
 
 */
 
@@ -15,17 +15,12 @@ var CHEIGHT;
 var CGAP = 10;
 var CXSPACING;
 var CYSPACING;
-var CROWS = 3;
 
 var snowstack_options = {
-	refreshzoom: false,
+	rows: 3,
+	refreshzoom: true,
 	captions: false
 };
-
-function translate3d(x, y, z)
-{
-	return "translate3d(" + x + "px, " + y + "px, " + z + "px)";
-}
 
 var vfx = {
 	elem: function (name, attrs, child)
@@ -52,9 +47,13 @@ var vfx = {
 	{
 		return document.getElementById(id);
 	},
-	loadback: function (elem, callback)
+	loadhandler: function (elem, callback)
 	{
 		elem.addEventListener("load", callback, false);
+	},
+	translate3d: function (x, y, z)
+	{
+		return "translate3d(" + x + "px, " + y + "px, " + z + "px)";
 	}
 };
 
@@ -75,29 +74,29 @@ var zoomTimer = null;
 
 function cameraTransformForCell(n)
 {
-	var x = Math.floor(n / CROWS);
-	var y = n - x * CROWS;
+	var x = Math.floor(n / snowstack_options.rows);
+	var y = n - x * snowstack_options.rows;
 	var cx = (x + 0.5) * CXSPACING;
 	var cy = (y + 0.5) * CYSPACING;
 
 	if (magnifyMode)
 	{
-		return translate3d(-cx, -cy, 180);
+		return vfx.translate3d(-cx, -cy, 180);
 	}
 	else
 	{
-		return translate3d(-cx, -cy, 0);
+		return vfx.translate3d(-cx, -cy, 0);
 	}	
 }
 
 function layoutImageInCell(image, cell)
 {
-    var iwidth = image.width;
-    var iheight = image.height;
-    var ratio = Math.min(CHEIGHT / iheight, CWIDTH / iwidth);
-    
-    iwidth *= ratio;
-    iheight *= ratio;
+	var iwidth = image.width;
+	var iheight = image.height;
+	var ratio = Math.min(CHEIGHT / iheight, CWIDTH / iwidth);
+	
+	iwidth *= ratio;
+	iheight *= ratio;
 
 	image.style.width = Math.round(iwidth) + "px";
 	image.style.height = Math.round(iheight) + "px";
@@ -204,7 +203,7 @@ function snowstack_update(newIndex, newmagnifymode)
 	var targetMatrix = new WebKitCSSMatrix(dolly.style.webkitTransform);
 	
 	var dx = currentMatrix.e - targetMatrix.e;
-	var angle = Math.min(Math.max(dx / (CXSPACING * 3.0), -1), 1) * 45;
+	var angle = Math.min(Math.max(dx / (CXSPACING * 3), -1), 1) * 45;
 
 	camera.style.webkitTransform = "rotateY(" + angle + "deg)";
 	camera.style.webkitTransitionDuration = "330ms";
@@ -224,20 +223,26 @@ function snowstack_update(newIndex, newmagnifymode)
 function snowstack_addimage(info)
 {
 	var cell = {};
-	var realn = cells.length;
+	var n = cells.length;
 	cells.push(cell);
 
-	var x = Math.floor(realn / CROWS);
-	var y = realn - x * CROWS;
+	var x = Math.floor(n / snowstack_options.rows);
+	var y = n - x * snowstack_options.rows;
 
 	cell.info = info;
+	
+	function make_celldiv()
+	{
+		var div = vfx.elem("div", { "class": "cell", "style": 'width: ' + CWIDTH + 'px; height: ' + CHEIGHT + 'px' });
+		div.style.webkitTransform = vfx.translate3d(x * CXSPACING, y * CYSPACING, 0);
+		return div;
+	}
 
-	cell.div = vfx.elem("div", { "class": "cell", "style": 'width: ' + CWIDTH + 'px; height: ' + CHEIGHT + 'px' });
-	cell.div.style.webkitTransform = translate3d(x * CXSPACING, y * CYSPACING, 0);
+	cell.div = make_celldiv();
 
 	cell.divimage = vfx.elem("img");
 
-	vfx.loadback(cell.divimage, function ()
+	vfx.loadhandler(cell.divimage, function ()
 	{
 		layoutImageInCell(cell.divimage, cell.div);
 		cell.divimage.style.opacity = 0;
@@ -248,14 +253,13 @@ function snowstack_addimage(info)
 	vfx.byid("stack").appendChild(cell.div);
 	cell.divimage.src = info.thumb;
 
-	if (y == (CROWS - 1))
+	if (y == (snowstack_options.rows - 1))
 	{
-		cell.reflection = vfx.elem("div", { "class": "cell", "style": 'width: ' + CWIDTH + 'px; height: ' + CHEIGHT + 'px' });
-		cell.reflection.style.webkitTransform = translate3d(x * CXSPACING, y * CYSPACING, 0);
+		cell.reflection = make_celldiv();
 
 		cell.reflectionimage = vfx.elem("img", { "class": "reflection" });
 	
-		vfx.loadback(cell.reflectionimage, function ()
+		vfx.loadhandler(cell.reflectionimage, function ()
 		{
 			layoutImageInCell(cell.reflectionimage, cell.reflection);
 			cell.reflectionimage.style.opacity = 0;
@@ -268,59 +272,79 @@ function snowstack_addimage(info)
 	}
 }
 
-function snowstack_init(imagefun)
+function snowstack_init(imagefun, options)
 {
-	var page = 1;
 	var loading = true;
+	
+	if (options)
+	{
+		for (var key in options)
+		{
+			if (options.hasOwnProperty(key))
+			{
+				snowstack_options[key] = options[key];
+			}
+		}
+	}
+	
+	if (typeof imagefun === "array")
+	{
+		var images_array = imagefun;
+		imagefun = function (callback)
+		{
+			callback(images_array);
+			images_array = [];
+		};
+	}
 
-	CHEIGHT = Math.round(window.innerHeight / (CROWS + 2));
+	CHEIGHT = Math.round(window.innerHeight / (snowstack_options.rows + 2));
 	CWIDTH = Math.round(CHEIGHT * 300 / 180);
 	CXSPACING = CWIDTH + CGAP;
 	CYSPACING = CHEIGHT + CGAP;
 
-	vfx.byid("mirror").style.webkitTransform = "scaleY(-1.0) " + translate3d(0, - CYSPACING * (CROWS * 2) - 1, 0);
+	vfx.byid("mirror").style.webkitTransform = "scaleY(-1.0) " + vfx.translate3d(0, - CYSPACING * (snowstack_options.rows * 2) - 1, 0);
 
-    imagefun(function (images)
-    {
-    	images.forEach(snowstack_addimage);
-		snowstack_update(Math.floor(CROWS / 2), false);
-    	loading = false;
-    }, page);
-    
-    var keys = { left: false, right: false, up: false, down: false };
+	imagefun(function (images)
+	{
+		images.forEach(snowstack_addimage);
+		snowstack_update(Math.floor(snowstack_options.rows / 2), false);
+		loading = false;
+	});
 
-    var keymap = { 37: "left", 38: "up", 39: "right", 40: "down" };
-    
-    var keytimer = null;
-    
-    function updatekeys()
-    {
-    	var newCellIndex = currentCellIndex;
+	var keys = { left: false, right: false, up: false, down: false };
+
+	var keymap = { 37: "left", 38: "up", 39: "right", 40: "down" };
+
+	var keytimer = null;
+	var keydelay = 330;
+
+	function updatekeys()
+	{
+		var newCellIndex = currentCellIndex;
 		if (keys.left)
 		{
 			/* Left Arrow */
-			if (newCellIndex >= CROWS)
+			if (newCellIndex >= snowstack_options.rows)
 			{
-				newCellIndex -= CROWS;
+				newCellIndex -= snowstack_options.rows;
 			}
 		}
 		if (keys.right)
 		{
 			/* Right Arrow */
-			if ((newCellIndex + CROWS) < cells.length)
+			if ((newCellIndex + snowstack_options.rows) < cells.length)
 			{
-				newCellIndex += CROWS;
+				newCellIndex += snowstack_options.rows;
 			}
 			else if (!loading)
 			{
 				/* We hit the right wall, add some more */
-				page = page + 1;
 				loading = true;
-			    imagefun(function (images)
+				imagefun(function (images)
 				{
 					images.forEach(snowstack_addimage);
 					loading = false;
-				}, page);
+				});
 			}
 		}
 		if (keys.up)
@@ -335,33 +359,32 @@ function snowstack_init(imagefun)
 		}
 
 		snowstack_update(newCellIndex, magnifyMode);
-    }
-    
-	var delay = 330;
+	}
 
-    function keycheck()
-    {
-    	if (keys.left || keys.right || keys.up || keys.down)
-    	{
-	    	if (keytimer === null)
-	    	{
-	    		delay = 330;
-	    		var doTimer = function ()
-	    		{
-	    			updatekeys();
-	    			keytimer = setTimeout(doTimer, delay);
-	    			delay = 60;
-	    		};
-	    		doTimer();
-	    	}
-    	}
-    	else
-    	{
-    		clearTimeout(keytimer);
-    		keytimer = null;
-    	}
-    }
-    
+	function repeattimer()
+	{
+		updatekeys();
+		keytimer = setTimeout(repeattimer, keydelay);
+		keydelay = 60;
+	}
+
+	function keycheck()
+	{
+		if (keys.left || keys.right || keys.up || keys.down)
+		{
+			if (keytimer === null)
+			{
+				keydelay = 330;
+				repeattimer();
+			}
+		}
+		else
+		{
+			clearTimeout(keytimer);
+			keytimer = null;
+		}
+	}
+
 	/* Limited keyboard support for now */
 	window.addEventListener('keydown', function (e)
 	{
@@ -377,7 +400,7 @@ function snowstack_init(imagefun)
 		
 		keycheck();
 	});
-	
+
 	window.addEventListener('keyup', function (e)
 	{
 		keys[keymap[e.keyCode]] = false;

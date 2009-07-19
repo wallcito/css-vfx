@@ -57,7 +57,9 @@ body
 
 <script type="text/javascript">
 
-function flickr(callback, page)
+var page = 1;
+
+function flickr(callback)
 {
     var url = "http://api.flickr.com/services/rest/?method=flickr.interestingness.getList&api_key=60746a125b4a901f2dbb6fc902d9a716&per_page=21&extras=url_o,url_m,url_s,owner_name&page=" + page + "&format=json&jsoncallback=?";
     
@@ -75,6 +77,7 @@ function flickr(callback, page)
         });
 
         callback(images);
+        page = page + 1;
     });
 }
 

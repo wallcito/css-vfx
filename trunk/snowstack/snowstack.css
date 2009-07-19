@@ -10,13 +10,6 @@
     -webkit-transform-style: preserve-3d;
 }
 
-.viewflat
-{
-	position: absolute;
-	display: block;
-    -webkit-transform-style: preserve-3d;
-}
-
 .fader
 {
 	-webkit-transition-property: opacity;
@@ -74,7 +67,7 @@ div.cell img
 	display: block;
 	position: absolute;
 
-	-webkit-transition-property: -webkit-transform opacity/* PERF -webkit-box-shadow */ /* border-color */;
+	-webkit-transition-property: opacity -webkit-transform/* PERF -webkit-box-shadow */ /* border-color */;
 	-webkit-transition-duration: 550ms;
 	-webkit-transform: translate3d(0, 0, 0);
 	border: 1px solid transparent;
