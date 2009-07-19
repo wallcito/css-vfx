@@ -58,19 +58,20 @@ var vfx = {
 };
 
 var currentCellIndex = -1;
-
 var cells = [];
 
-var currentTimer = null;
+var dolly;
+var camera;
+var caption;
 
-var dolly = vfx.byid("dolly");
-var camera = vfx.byid("camera");
-var caption = vfx.byid("caption");
+var cellstack;
+var reflectionstack;
 
 var magnifyMode;
 var newbieUser = true;
 
 var zoomTimer = null;
+var currentTimer = null;
 
 function cameraTransformForCell(n)
 {
@@ -125,6 +126,15 @@ function refreshImage(elem, cell)
 	}, 2000);
 }
 
+function setcellclass(c, name)
+{
+	c.div.className = name;
+	if (c.reflection)
+	{
+		c.reflection.className = name;
+	}
+}
+
 function snowstack_update(newIndex, newmagnifymode)
 {
 	if (currentCellIndex == newIndex && magnifyMode == newmagnifymode)
@@ -132,15 +142,6 @@ function snowstack_update(newIndex, newmagnifymode)
 		return;
 	}
 	
-	function setcellclass(c, name)
-	{
-		c.div.className = name;
-		if (c.reflection)
-		{
-			c.reflection.className = name;
-		}
-	}
-
 	if (currentCellIndex != -1)
 	{
 		setcellclass(cells[currentCellIndex], "cell");
@@ -250,7 +251,7 @@ function snowstack_addimage(info)
 		cell.divimage.style.opacity = 1.0;
 	});
 	
-	vfx.byid("stack").appendChild(cell.div);
+	cellstack.appendChild(cell.div);
 	cell.divimage.src = info.thumb;
 
 	if (y == (snowstack_options.rows - 1))
@@ -267,7 +268,7 @@ function snowstack_addimage(info)
 			cell.reflectionimage.style.opacity = 1.0;
 		});
 	
-		vfx.byid("rstack").appendChild(cell.reflection);
+		reflectionstack.appendChild(cell.reflection);
 		cell.reflectionimage.src = info.thumb;
 	}
 }
@@ -276,6 +277,12 @@ function snowstack_init(imagefun, options)
 {
 	var loading = true;
 	
+	dolly = vfx.byid("dolly");
+	camera = vfx.byid("camera");
+	caption = vfx.byid("caption");
+	cellstack = vfx.byid("stack");
+	reflectionstack = vfx.byid("rstack");
+
 	if (options)
 	{
 		for (var key in options)
