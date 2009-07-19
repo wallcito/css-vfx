@@ -242,7 +242,7 @@ function snowstack_addimage(info)
 		layoutImageInCell(cell.divimage, cell.div);
 		cell.divimage.style.opacity = 0;
 		cell.div.appendChild(vfx.elem("a", { "class": "mover view", "href": cell.info.link, "target": "_blank" }, cell.divimage));
-		cell.divimage.style.opacity = 1;
+		cell.divimage.style.opacity = 1.0;
 	});
 	
 	vfx.byid("stack").appendChild(cell.div);
@@ -260,7 +260,7 @@ function snowstack_addimage(info)
 			layoutImageInCell(cell.reflectionimage, cell.reflection);
 			cell.reflectionimage.style.opacity = 0;
 			cell.reflection.appendChild(vfx.elem("div", { "class": "mover view" }, cell.reflectionimage));
-			cell.reflectionimage.style.opacity = 1;
+			cell.reflectionimage.style.opacity = 1.0;
 		});
 	
 		vfx.byid("rstack").appendChild(cell.reflection);
