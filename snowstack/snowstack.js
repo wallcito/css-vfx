@@ -18,7 +18,7 @@ var CYSPACING;
 var CROWS = 3;
 
 var snowstack_options = {
-	captions: false
+	captions: true
 };
 
 function translate3d(x, y, z)
@@ -159,7 +159,8 @@ function snowstack_update(newIndex, newmagnifymode)
 		
 		if (snowstack_options.captions)
 		{
-			jQuery(caption).text(cell.info.title)[0].style.opacity = 1;
+			caption.innerText = cell.info.title;
+			caption.style.opacity = 1;
 		}
 
 		cell.div.className = "cell magnify";
