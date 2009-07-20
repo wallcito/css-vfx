@@ -58,7 +58,7 @@ function flickr_stream (callback)
    var flickr_metadata = // get flickr images from flickr_page;
    var images = jQuery.map(flickr_metadata, function (n, info)
    {
-      return info.thumb_url;
+      return info.thumb_url; // This can also be an object just like in Example 2.
    });
    callback(images);
    flickr_page += 1; // increment page number for next call to this function.
