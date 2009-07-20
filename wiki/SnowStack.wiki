@@ -66,3 +66,5 @@ function flickr_stream (callback)
 
 snowstack_init(flickr_stream);
 }}}
+
+A current full example is available [http://css-vfx.googlecode.com/svn/trunk/snowstack/snowstack.html here] as part of the source code.
