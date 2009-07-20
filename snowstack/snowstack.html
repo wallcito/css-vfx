@@ -48,7 +48,6 @@ body
 	snow stack / webkit css visual effects demo &mdash; arrow keys to move, space toggles magnify
 </div>
 
-
 <script type="text/javascript" src="snowstack.js"></script>
 
 <script type="text/javascript">
@@ -77,8 +76,29 @@ function flickr(callback)
     });
 }
 
+function init_pageimages(options)
+{
+	var imgs = document.querySelectorAll("a>img");
+	var images = [];
+
+	for (var i = 0; i < imgs.length; i++)
+	{
+		var img = imgs[i];
+		var title = img.alt || img.title || img.parentNode.title;
+		var thumb = img.src;
+		var link = img.parentNode.href;
+		var zoom = img.src;
+		
+		images.push({ title: title, thumb: thumb, link: link, zoom: zoom });
+	}
+
+	snowstack_init(images, options);
+}
+
+
 jQuery(window).load(function ()
 {
+//  init_pageimages();
 	snowstack_init(flickr);
 });
 
