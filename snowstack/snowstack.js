@@ -1,8 +1,6 @@
-// (function () {  // Module pattern
-
-var global = this;
-
 /*
+	Snow Stack 3D CSS Photo Viewer
+
 	Copyright (C) 2009 Charles Ying. All Rights Reserved.
 	This source code is available under Apache License 2.0.
 	
@@ -11,6 +9,10 @@ var global = this;
 		shadows (and animated shadows) plus border animations can cause additional redraws
 		offsetWidth / offsetHeight should be avoided.
 */
+
+// (function () {  // Module pattern
+
+var global = this;
 
 var CWIDTH;
 var CHEIGHT;
@@ -21,7 +23,7 @@ var CYSPACING;
 var snowstack_options = {
 	rows: 3,
 	refreshzoom: true,
-	captions: false
+	captions: true
 };
 
 var vfx = {
@@ -231,6 +233,12 @@ function snowstack_addimage(info)
 
 	var x = Math.floor(n / snowstack_options.rows);
 	var y = n - x * snowstack_options.rows;
+	
+	if (typeof info === "string")
+	{
+		var imageurl = info;
+		info = { "thumb": imageurl, "zoom": imageurl, "title": "" };
+	}
 
 	cell.info = info;
 	
@@ -249,7 +257,16 @@ function snowstack_addimage(info)
 	{
 		layoutImageInCell(cell.divimage, cell.div);
 		cell.divimage.style.opacity = 0;
-		cell.div.appendChild(vfx.elem("a", { "class": "mover view", "href": cell.info.link, "target": "_blank" }, cell.divimage));
+		
+		if (cell.info.link)
+		{
+			cell.div.appendChild(vfx.elem("a", { "class": "mover view", "href": cell.info.link, "target": "_blank" }, cell.divimage));
+		}
+		else
+		{
+			cell.div.appendChild(vfx.elem("div", { "class": "mover view" }, cell.divimage));
+		}
+		
 		cell.divimage.style.opacity = 1.0;
 	});
 	
@@ -279,11 +296,21 @@ global.snowstack_init = function (imagefun, options)
 {
 	var loading = true;
 	
-	dolly = vfx.byid("dolly");
 	camera = vfx.byid("camera");
-	caption = vfx.byid("caption");
-	cellstack = vfx.byid("stack");
-	reflectionstack = vfx.byid("rstack");
+	
+	reflectionstack = vfx.elem("div", { "class": "view" });
+	var mirror = vfx.elem("div", { "class": "view" }, reflectionstack);
+	cellstack = vfx.elem("div", { "class": "view" });
+	dolly = vfx.elem("div", { "class": "dolly view" });
+	dolly.appendChild(cellstack);
+	dolly.appendChild(mirror);
+	
+	while (camera.hasChildNodes())
+	{
+		camera.removeChild(camera.firstChild);
+	}
+
+	camera.appendChild(dolly);
 
 	if (options)
 	{
@@ -311,7 +338,7 @@ global.snowstack_init = function (imagefun, options)
 	CXSPACING = CWIDTH + CGAP;
 	CYSPACING = CHEIGHT + CGAP;
 
-	vfx.byid("mirror").style.webkitTransform = "scaleY(-1.0) " + vfx.translate3d(0, - CYSPACING * (snowstack_options.rows * 2) - 1, 0);
+	mirror.style.webkitTransform = "scaleY(-1.0) " + vfx.translate3d(0, - CYSPACING * (snowstack_options.rows * 2) - 1, 0);
 
 	imagefun(function (images)
 	{
