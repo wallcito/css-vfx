@@ -23,7 +23,7 @@ var CYSPACING;
 var snowstack_options = {
 	rows: 3,
 	refreshzoom: true,
-	captions: true
+	captions: false
 };
 
 var vfx = {
