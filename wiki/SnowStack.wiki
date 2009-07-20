@@ -1,0 +1,35 @@
+#summary About Snow Stack and How to use it
+
+= What is Snow Stack? =
+
+A new photo viewing 3D CSS Visual Effects library using pure HTML, WebKit’s 3D CSS Effects extensions and JavaScript.
+
+<wiki:video url="http://www.youtube.com/watch?v=3R6sb4NO25E"/>
+
+For more details please see the [http://www.satine.org/archives/2009/07/11/snow-stack-is-here/ blog post about the effect]
+
+= Setting up Snow Stack =
+
+You'll need to add 3 things:
+
+Add snowstack.css to the head:
+{{{
+<link rel="stylesheet" type="text/css" href="snowstack.css">
+}}}
+
+Add this code to your page:
+
+{{{
+<div class="page view">
+    <div class="origin view">
+        <div id="camera" class="camera view"></div>
+    </div>
+</div>
+}}}
+
+Add snowstack.js to the page body:
+{{{
+<script type="text/javascript" src="snowstack.js"></script>
+}}}
+
+= Starting Snow Stack =
