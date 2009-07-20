@@ -296,7 +296,7 @@ global.snowstack_init = function (imagefun, options)
 		}
 	}
 	
-	if (typeof imagefun === "array")
+	if (typeof imagefun !== "function")
 	{
 		var images_array = imagefun;
 		imagefun = function (callback)
