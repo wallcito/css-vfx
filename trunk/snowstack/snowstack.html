@@ -10,8 +10,6 @@
 <title>Snow Stack - WebKit 3D CSS Visual Effects</title>
 <meta name="Description" content="Snow Stack is a demo of WebKit CSS 3D visual effects with latest WebKit nightly on Mac OS X Snow Leopard" />
 
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
-
 <link rel="stylesheet" type="text/css" href="snowstack.css">
 
 <style type="text/css">
@@ -25,6 +23,24 @@ body
 	padding: 0;
 }
 
+#caption
+{
+	position: absolute;
+	bottom: 0; right: 0; left: 0;
+	font-size: 15pt;
+	text-overflow: ellipsis; overflow: hidden; white-space: nowrap;
+	padding: 10pt 10pt 10pt 20pt;
+	-webkit-transform: translate3d(0, 0, 2000px);
+	background-color: rgba(0, 0, 0, 0.5);
+	-webkit-transition-property: opacity;
+	-webkit-transition-duration: 550ms;
+}
+
+#caption.hide
+{
+    opacity: 0;
+}
+
 </style>
 
 </head>
@@ -33,14 +49,7 @@ body
 
 <div class="page view">
     <div class="origin view">
-    	<div id="camera" class="camera view">
-    		<div id="dolly" class="dolly view">
-    			<div id="stack" class="view"></div>
-    			<div id="mirror" class="view">
-    				<div id="rstack" class="view"></div>
-    			</div>
-    		</div>
-    	</div>
+        <div id="camera" class="camera view"></div>
     </div>
 </div>
 
@@ -49,6 +58,7 @@ body
 </div>
 
 <script type="text/javascript" src="snowstack.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
 
 <script type="text/javascript">
 
@@ -62,11 +72,11 @@ function flickr(callback)
 	{
         var images = jQuery.map(data.photos.photo, function (item)
         {
+            /* return item.url_s; */
             return {
                 title: item.ownername + " / " + item.title,
             	thumb: item.url_s,
             	zoom: 'http://farm' + item.farm + '.static.flickr.com/' + item.server + '/' + item.id + '_' + item.secret + '.jpg',
-//            	thumb: 'http://farm' + item.farm + '.static.flickr.com/' + item.server + '/' + item.id + '_' + item.secret + '.jpg',
             	link: 'http://www.flickr.com/photos/' + item.owner + '/' + item.id
             };
         });
