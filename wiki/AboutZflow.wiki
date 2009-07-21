@@ -1,5 +1,11 @@
 #summary How zflow is built and how to use zflow as a component.
 
+= What is zflow? =
+
+<wiki:video url="http://www.youtube.com/watch?v=4FvsMhznf2I" />
+
+For more details, please see the [http://www.satine.org/archives/2008/11/06/coverflow-for-safari-on-iphone/ blog post]
+
 = Documentation =
 
 Include zflow.css, zflow.js, and jQuery in your web page.
