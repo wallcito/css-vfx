@@ -8,7 +8,7 @@ Try out the demos, take a look at the source, and have fun! -- [http://www.satin
 
 == Gem 1: Cover Flow (zflow) ==
 
-<wiki:video url="http://www.youtube.com/watch?v=sHLaHGxIzb4" />
+<wiki:video url="http://www.youtube.com/watch?v=4FvsMhznf2I" />
 
 [http://css-vfx.googlecode.com/svn/trunk/examples/zflow.html iPhone Safari Demo] - using flickr "interesting" photos feed
 
