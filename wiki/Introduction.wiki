@@ -10,20 +10,24 @@ Try out the demos, take a look at the source, and have fun! -- [http://www.satin
 
 <wiki:video url="http://www.youtube.com/watch?v=sHLaHGxIzb4" />
 
-[http://css-vfx.googlecode.com/svn/trunk/examples/zflow.html Demo] - (uses flickr photos feed)
+[http://css-vfx.googlecode.com/svn/trunk/examples/zflow.html iPhone Safari Demo] - (uses flickr photos feed)
 
 [AboutZflow How zflow is built] - Includes comments on setup, reflections, performance, inertia, etc.
 
 == Gem 2: Snow Stack ==
 
-SnowStack (insert something clever here)
+<wiki:video url="http://www.youtube.com/watch?v=3R6sb4NO25E" />
 
-== CSS Visual Effects Reference ==
+[http://css-vfx.googlecode.com/svn/trunk/snowstack/snowstack.html WebKit Nightly Demo] (requires recent WebKit nightly on OS X Leopard, Safari on OS X Snow Leopard)
 
-Apple's extensions for iPhone Safari are documented here.
- * [http://webkit.org/specs/CSSVisualEffects/CSSTransforms.html CSS 3D Transforms]
- * [http://webkit.org/specs/CSSVisualEffects/CSSTransitions.html CSS Transitions]
- * [http://webkit.org/specs/CSSVisualEffects/CSSAnimation.html CSS Animation]
+[SnowStack Snow Stack] - Details on setting up Snow Stack for your own images and links to source code.
+
+== CSS Visual Effects References ==
+
+Apple's 3D CSS Visual Effects extensions are available here:
+ * [http://www.w3.org/TR/css3-3d-transforms/ CSS 3D Transforms]
+ * [http://www.w3.org/TR/css3-transitions/ CSS Transitions]
+ * [http://www.w3.org/TR/css3-animations/ CSS Animation]
 
 == Additional Contributors ==
 
