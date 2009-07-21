@@ -10,7 +10,7 @@ Try out the demos, take a look at the source, and have fun! -- [http://www.satin
 
 <wiki:video url="http://www.youtube.com/watch?v=sHLaHGxIzb4" />
 
-[http://css-vfx.googlecode.com/svn/trunk/examples/zflow.html iPhone Safari Demo] - (uses flickr photos feed)
+[http://css-vfx.googlecode.com/svn/trunk/examples/zflow.html iPhone Safari Demo] - using flickr "interesting" photos feed
 
 [AboutZflow How zflow is built] - Includes comments on setup, reflections, performance, inertia, etc.
 
