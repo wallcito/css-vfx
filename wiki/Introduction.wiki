@@ -6,7 +6,7 @@ Welcome to *css-vfx*, a collection of components and code examples that illustra
 
 Try out the demos, take a look at the source, and have fun! -- [http://www.satine.org/ Charles Ying]
 
-== Gem 1: Cover Flow (zflow) ==
+== CSS Effect 1: Cover Flow (zflow) ==
 
 <wiki:video url="http://www.youtube.com/watch?v=4FvsMhznf2I" />
 
@@ -14,7 +14,7 @@ Try out the demos, take a look at the source, and have fun! -- [http://www.satin
 
 [AboutZflow How zflow is built] - Includes comments on setup, reflections, performance, inertia, etc.
 
-== Gem 2: Snow Stack ==
+== CSS Effect 2: Snow Stack ==
 
 <wiki:video url="http://www.youtube.com/watch?v=3R6sb4NO25E" />
 
