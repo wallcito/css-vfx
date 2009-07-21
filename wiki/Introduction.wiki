@@ -8,11 +8,15 @@ Try out the demos, take a look at the source, and have fun! -- [http://www.satin
 
 == Gem 1: Cover Flow (zflow) ==
 
-http://groups.google.com/group/css-vfx/web/css-vfx-zflow-screenshot.jpg
+<wiki:video url="http://www.youtube.com/watch?v=sHLaHGxIzb4" />
 
 [http://css-vfx.googlecode.com/svn/trunk/examples/zflow.html Demo] - (uses flickr photos feed)
 
 [AboutZflow How zflow is built] - Includes comments on setup, reflections, performance, inertia, etc.
+
+== Gem 2: Snow Stack ==
+
+SnowStack (insert something clever here)
 
 == CSS Visual Effects Reference ==
 
