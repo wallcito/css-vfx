@@ -6,6 +6,8 @@ A new photo viewing 3D CSS Visual Effects library using pure HTML, WebKit’s 3D
 
 <wiki:video url="http://www.youtube.com/watch?v=3R6sb4NO25E"/>
 
+[http://css-vfx.googlecode.com/svn/trunk/snowstack/snowstack.html A live demo is available here] which requires a recent WebKit nightly or a seed of OS X Snow Leopard.
+
 For more details please see the [http://www.satine.org/archives/2009/07/11/snow-stack-is-here/ blog post about the effect]
 
 = Setting up Snow Stack =
