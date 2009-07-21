@@ -4,8 +4,6 @@
 
 <wiki:video url="http://www.youtube.com/watch?v=4FvsMhznf2I" />
 
-[http://css-vfx.googlecode.com/svn/trunk/snowstack/snowstack.html A live demo is available here] which requires a recent WebKit nightly or a seed of OS X Snow Leopard.
-
 For more details, please see the [http://www.satine.org/archives/2008/11/06/coverflow-for-safari-on-iphone/ blog post]
 
 = Documentation =
