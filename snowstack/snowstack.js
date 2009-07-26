@@ -94,38 +94,101 @@ function cameraTransformForCell(n)
 	}	
 }
 
-function layoutImageInCell(image, cell)
+function layoutElement(elem, iwidth, iheight)
 {
-	var iwidth = image.width;
-	var iheight = image.height;
 	var ratio = Math.min(CHEIGHT / iheight, CWIDTH / iwidth);
 	
 	iwidth *= ratio;
 	iheight *= ratio;
 
-	image.style.width = Math.round(iwidth) + "px";
-	image.style.height = Math.round(iheight) + "px";
+	elem.style.width = Math.round(iwidth) + "px";
+	elem.style.height = Math.round(iheight) + "px";
 
-	image.style.left = Math.round((CWIDTH - iwidth) / 2) + "px";
-	image.style.top = Math.round((CHEIGHT - iheight) / 2) + "px";
+	elem.style.left = Math.round((CWIDTH - iwidth) / 2) + "px";
+	elem.style.top = Math.round((CHEIGHT - iheight) / 2) + "px";
 }
+
+//////////////////////
+
+var currentVideo = null;
+
+function play_video(newVideo)
+{
+	if (currentVideo && !currentVideo.isPaused())
+	{
+		currentVideo.pause();
+	}
+	
+	currentVideo = newVideo;
+	
+	currentVideo.play();
+}
+
+//////////////////////
+
+function html5video(elem, cell)
+{
+	var video = vfx.elem("video", { "class": "media" });
+	
+	var videolayout = function (e)
+	{
+		layoutElement(video, video.videoWidth, video.videoHeight);
+		elem.parentNode.removeChild(elem);
+		return false;
+	};
+
+	var playstarter = function (e)
+	{
+		play_video(cell.video);	
+		return false;
+	};
+
+	video.addEventListener("loadedmetadata", videolayout, false);
+	video.addEventListener("canplay", playstarter, false);
+	elem.parentNode.appendChild(video);
+	video.src = cell.info.video;
+	video.load();
+
+	cell.video = {
+		play: function () { video.play(); },
+		pause: function () { video.pause(); },
+		isPaused: function () { return video.paused; }
+	};
+}
+
+//////////////////////
 
 function refreshImage(elem, cell)
 {
-	if (elem.src === cell.info.zoom)
-	{
-		return;
-	}
-
 	if (zoomTimer)
 	{
 		clearTimeout(zoomTimer);
 	}
 	
+	if (cell.video)
+	{
+		if (cell.video.isPaused())
+		{
+			play_video(cell.video);
+		}
+		return;
+	}
+
 	zoomTimer = setTimeout(function ()
 	{
-		elem.src = cell.info.zoom;
-
+		if (cell.info.videoloader)
+		{
+			cell.info.videoloader(elem, cell);
+		}
+		else if (cell.info.video)
+		{
+			html5video(elem, cell);
+		}
+		else if (cell.info.zoom)
+		{
+			elem.src = cell.info.zoom;
+		}
+		
 		zoomTimer = null;
 	}, 2000);
 }
@@ -148,7 +211,8 @@ function snowstack_update(newIndex, newmagnifymode)
 	
 	if (currentCellIndex != -1)
 	{
-		setcellclass(cells[currentCellIndex], "cell");
+		var oldCell = cells[currentCellIndex];
+		setcellclass(oldCell, "cell");
 	}
 	
 	newIndex = Math.min(Math.max(newIndex, 0), cells.length - 1);
@@ -206,8 +270,7 @@ function snowstack_update(newIndex, newmagnifymode)
 	
 	var currentMatrix = new WebKitCSSMatrix(document.defaultView.getComputedStyle(dolly, null).webkitTransform);
 	var targetMatrix = new WebKitCSSMatrix(dolly.style.webkitTransform);
-	
-	var dx = currentMatrix.e - targetMatrix.e;
+	var dx = currentMatrix.m41 - targetMatrix.m41;
 	var angle = Math.min(Math.max(dx / (CXSPACING * 3), -1), 1) * 45;
 
 	camera.style.webkitTransform = "rotateY(" + angle + "deg)";
@@ -251,12 +314,11 @@ function snowstack_addimage(info)
 
 	cell.div = make_celldiv();
 
-	cell.divimage = vfx.elem("img");
+	cell.divimage = vfx.elem("img", { "class": "media" });
 
 	vfx.loadhandler(cell.divimage, function ()
 	{
-		layoutImageInCell(cell.divimage, cell.div);
-		cell.divimage.style.opacity = 0;
+		layoutElement(cell.divimage, cell.divimage.width, cell.divimage.height);
 		
 		if (cell.info.link)
 		{
@@ -266,10 +328,11 @@ function snowstack_addimage(info)
 		{
 			cell.div.appendChild(vfx.elem("div", { "class": "mover view" }, cell.divimage));
 		}
-		
-		cell.divimage.style.opacity = 1.0;
+
+		cell.div.style.opacity = 1.0;
 	});
-	
+
+	cell.div.style.opacity = 0;
 	cellstack.appendChild(cell.div);
 	cell.divimage.src = info.thumb;
 
@@ -277,16 +340,16 @@ function snowstack_addimage(info)
 	{
 		cell.reflection = make_celldiv();
 
-		cell.reflectionimage = vfx.elem("img", { "class": "reflection" });
-	
+		cell.reflectionimage = vfx.elem("img", { "class": "media reflection" });
+
 		vfx.loadhandler(cell.reflectionimage, function ()
 		{
-			layoutImageInCell(cell.reflectionimage, cell.reflection);
-			cell.reflectionimage.style.opacity = 0;
+			layoutElement(cell.reflectionimage, cell.reflectionimage.width, cell.reflectionimage.height);
 			cell.reflection.appendChild(vfx.elem("div", { "class": "mover view" }, cell.reflectionimage));
-			cell.reflectionimage.style.opacity = 1.0;
+			cell.reflection.style.opacity = 1.0;
 		});
 	
+		cell.reflection.style.opacity = 0;
 		reflectionstack.appendChild(cell.reflection);
 		cell.reflectionimage.src = info.thumb;
 	}
@@ -442,6 +505,6 @@ global.snowstack_init = function (imagefun, options)
 		keys[keymap[e.keyCode]] = false;
 		keycheck();
 	});
-}
+};
 
 //})(); // end module pattern

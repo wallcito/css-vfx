@@ -52,34 +52,40 @@ div.cell
 {
 	position: absolute;
 	-webkit-transform-style: preserve-3d;
-	-webkit-transition-property: -webkit-transform opacity;
+	-webkit-transition-property: -webkit-transform,opacity;
 	-webkit-transition-duration: 550ms;
 	-webkit-transform: translate3d(0, 0, 0);
 }
 
-div.cell img
+div.cell .media
 {
 	display: block;
 	position: absolute;
 
-	-webkit-transition-property: opacity -webkit-transform/* PERF -webkit-box-shadow */ /* border-color */;
+	-webkit-transition-property: -webkit-transform;
 	-webkit-transition-duration: 550ms;
 	-webkit-transform: translate3d(0, 0, 0);
+}
+
+/* PERF
+div.cell .media
+{
+	-webkit-transition-property: opacity -webkit-transform -webkit-box-shadow border-color;
 	border: 1px solid transparent;
 }
 
-div.selected img, div.magnify img
+div.selected img, div.magnify img, div.selected video, div.magnify video
 {
-/* PERF
 	-webkit-box-shadow: 0px 0px 35px #000;
-*/
 	border-color: black;
 }
+*/
 
 .mover
 {
 	-webkit-transition-property: -webkit-transform;
 	-webkit-transition-duration: 550ms;
+	-webkit-transform: translate3d(0, 0, 0px);
 }
 
 div.selected .mover
@@ -89,10 +95,11 @@ div.selected .mover
 
 div.magnify .mover
 {
-	-webkit-transform: translate3d(0, 0, 100px);
+	-webkit-transform: translate3d(0, 0, 140px);
 }
 
-div.magnify img
+div.magnify img.media, 
+div.magnify video.media
 {
 	-webkit-transform: scale(2.0);
 }
