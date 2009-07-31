@@ -222,22 +222,17 @@ function snowstack_update(newIndex, newmagnifymode)
 
 	magnifyMode = newmagnifymode;
 	
+	// Show the photo caption
+	if (snowstack_options.captions)
+	{
+		caption.innerText = cell.info.title;
+		caption.style.opacity = 1;
+	}
+
 	if (magnifyMode)
 	{
 		// User figured out magnify mode, not a newbie.
 		newbieUser = false;
-
-		// Show the photo caption
-		
-		if (snowstack_options.captions)
-		{
-			caption.innerText = cell.info.title;
-			caption.style.opacity = 1;
-		}
-		else if (caption)
-		{
-			caption.style.opacity = 0;
-		}
 
 		cell.div.className = "cell magnify";
 		
@@ -249,21 +244,16 @@ function snowstack_update(newIndex, newmagnifymode)
 	else
 	{
 		setcellclass(cell, "cell selected");
-		
-		if (snowstack_options.captions)
-		{
-			caption.style.opacity = 0;
-		}
 	}
 
 	if (newbieUser)
 	{
 		newbieUser = false;
-		
-		if (snowstack_options.captions)
-		{
-			caption.style.opacity = 0;
-		}
+
+    	if (snowstack_options.captions)
+    	{
+    		caption.style.opacity = 0;
+    	}
 	}
 
 	dolly.style.webkitTransform = cameraTransformForCell(newIndex);
@@ -505,6 +495,40 @@ global.snowstack_init = function (imagefun, options)
 		keys[keymap[e.keyCode]] = false;
 		keycheck();
 	});
+	
+	var startX = 0;
+	var lastX = 0;
+
+	var target = document.getElementById("camera");
+	
+	target.addEventListener('touchstart', function (e)
+	{
+		startX = event.touches[0].pageX;
+		lastX = startX;
+		e.preventDefault();
+		return false;
+	}, false);
+	
+	target.addEventListener('touchmove', function (e)
+	{
+		lastX = event.touches[0].pageX;
+		var dx = lastX - startX;
+		keys.left = (dx > 20);
+		keys.right = (dx < 20);
+		updatekeys();
+		startX = lastX;
+		e.preventDefault();
+		return false;
+	}, true);
+	
+	target.addEventListener('touchend', function (e)
+	{
+		keys.left = false;
+		keys.right = false;
+		e.preventDefault();
+		return false;
+	}, true);
+	
 };
 
 //})(); // end module pattern
