@@ -176,15 +176,7 @@ function refreshImage(elem, cell)
 
 	zoomTimer = setTimeout(function ()
 	{
-		if (cell.info.videoloader)
-		{
-			cell.info.videoloader(elem, cell);
-		}
-		else if (cell.info.video)
-		{
-			html5video(elem, cell);
-		}
-		else if (cell.info.zoom)
+		if (cell.info.zoom)
 		{
 			elem.src = cell.info.zoom;
 		}
@@ -199,6 +191,33 @@ function setcellclass(c, name)
 	if (c.reflection)
 	{
 		c.reflection.className = name;
+	}
+}
+
+function snowstack_togglemedia(index)
+{
+	var cell = cells[index];
+	
+	if (cell.video)
+	{
+		if (cell.video.isPaused())
+		{
+			play_video(cell.video);
+		}
+		else
+		{
+			cell.video.pause();
+		}
+		return;
+	}
+	
+	if (cell.info.videoloader)
+	{
+		cell.info.videoloader(cell.divimage, cell);
+	}
+	else if (cell.info.video)
+	{
+		html5video(cell.divimage, cell);
 	}
 }
 
@@ -481,6 +500,11 @@ global.snowstack_init = function (imagefun, options)
 		{
 			/* Magnify toggle with spacebar */
 			snowstack_update(currentCellIndex, !magnifyMode);
+		}
+		else if (e.keyCode == 13)
+		{
+			/* Toggle video playback */
+			snowstack_togglemedia(currentCellIndex);
 		}
 		else
 		{

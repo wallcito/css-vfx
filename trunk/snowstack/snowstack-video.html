@@ -9,7 +9,7 @@
     TODO: 
     	set volume to 0 when zooming back to wall
     	divide wall into years or topics
-    	add video controller (see antoine's session)
+    	add video controller
     	show titles in non magnify mode
     	x subtle gradient on page background so black videos don't bleed to background
 -->
@@ -162,18 +162,24 @@ function youtube(callback)
 
 function init_tedtalks()
 {
-    jQuery.getJSON("talks.txt", function (data)
+    jQuery.getJSON("tedtalks.txt", function (data)
     {
         var offset = 0;
         
         function sometedtalks(callback)
         {
         	var end = Math.min(offset + 25, data.length);
-        	callback(data.slice(offset, end));
+			var videos = jQuery.map(data.slice(offset, end), function (info)
+			{
+				/* There are some low-res videos in video_low */
+				info.video = info.video_low;
+				return info;
+			});
+        	callback(videos);
         	offset = end;
         }
         
-        snowstack_init(sometedtalks, { captions: true, rows: 5 });
+        snowstack_init(sometedtalks, { captions: true, rows: 5, refreshzoom: false });
     });
 }
 
