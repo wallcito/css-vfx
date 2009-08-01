@@ -101,5 +101,5 @@ div.magnify .mover
 div.magnify img.media, 
 div.magnify video.media
 {
-	-webkit-transform: scale(2.0);
+	-webkit-transform: translate3d(0, 0, 0) scale(2.0);
 }
