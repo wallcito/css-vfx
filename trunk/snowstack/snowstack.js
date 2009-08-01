@@ -116,11 +116,13 @@ function play_video(newVideo)
 {
 	if (currentVideo && !currentVideo.isPaused())
 	{
-		currentVideo.pause();
+//		currentVideo.pause();
+		currentVideo.setMuted(true);
 	}
 	
 	currentVideo = newVideo;
 	
+	currentVideo.setMuted(false);
 	currentVideo.play();
 }
 
@@ -152,7 +154,9 @@ function html5video(elem, cell)
 	cell.video = {
 		play: function () { video.play(); },
 		pause: function () { video.pause(); },
-		isPaused: function () { return video.paused; }
+		isPaused: function () { return video.paused; },
+		setMuted: function (muted) { video.muted = muted; },
+		isMuted: function () { return video.muted; }
 	};
 }
 
@@ -167,7 +171,7 @@ function refreshImage(elem, cell)
 	
 	if (cell.video)
 	{
-		if (cell.video.isPaused())
+		if (cell.video.isPaused() || cell.video.isMuted())
 		{
 			play_video(cell.video);
 		}
@@ -241,18 +245,14 @@ function snowstack_update(newIndex, newmagnifymode)
 
 	magnifyMode = newmagnifymode;
 	
-	// Show the photo caption
-	if (snowstack_options.captions)
-	{
-		caption.innerText = cell.info.title;
-		caption.style.opacity = 1;
-	}
-
 	if (magnifyMode)
 	{
 		// User figured out magnify mode, not a newbie.
-		newbieUser = false;
-
+		if (newbieUser)
+		{
+			newbieUser = false;
+		}
+	
 		cell.div.className = "cell magnify";
 		
 		if (snowstack_options.refreshzoom)
@@ -265,14 +265,10 @@ function snowstack_update(newIndex, newmagnifymode)
 		setcellclass(cell, "cell selected");
 	}
 
-	if (newbieUser)
+	// Show the photo caption
+	if (snowstack_options.captions && !newbieUser)
 	{
-		newbieUser = false;
-
-    	if (snowstack_options.captions)
-    	{
-    		caption.style.opacity = 0;
-    	}
+		caption.innerText = cell.info.title;
 	}
 
 	dolly.style.webkitTransform = cameraTransformForCell(newIndex);
