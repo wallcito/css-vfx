@@ -129,10 +129,11 @@ function play_video(newVideo)
 function html5video(elem, cell)
 {
 	var video = vfx.elem("video", { "class": "media" });
-	
+
 	var videolayout = function (e)
 	{
 		layoutElement(video, video.videoWidth, video.videoHeight);
+		elem.parentNode.appendChild(video);
 		elem.parentNode.removeChild(elem);
 		return false;
 	};
@@ -145,7 +146,6 @@ function html5video(elem, cell)
 
 	video.addEventListener("loadedmetadata", videolayout, false);
 	video.addEventListener("canplay", playstarter, false);
-	elem.parentNode.appendChild(video);
 	video.src = cell.info.video;
 	video.load();
 
