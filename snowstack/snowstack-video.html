@@ -7,11 +7,8 @@
     This source code is available under Apache License 2.0.
     
     TODO: 
-    	set volume to 0 when zooming back to wall
     	divide wall into years or topics
     	add video controller
-    	show titles in non magnify mode
-    	x subtle gradient on page background so black videos don't bleed to background
 -->
 
 <title>Snow Stack - WebKit 3D CSS Visual Effects</title>
@@ -40,7 +37,7 @@ div.bgfx
     padding: 0;
 }
 
-#caption
+.caption
 {
 	position: absolute;
 	bottom: 0; right: 0; left: 0;
@@ -53,9 +50,9 @@ div.bgfx
 	-webkit-transition-duration: 550ms;
 }
 
-#caption.hide
+.helptext
 {
-    opacity: 0;
+	font-size: 8pt;
 }
 
 </style>
@@ -72,9 +69,7 @@ div.bgfx
     </div>
 </div>
 
-<div id="caption" class="caption">
-	snow stack / webkit css visual effects demo &mdash; arrow keys to move, space toggles magnify
-</div>
+<div id="caption" class="caption">snow stack / webkit css visual effects demo &mdash; arrow keys to move, space toggles magnify, enter to play</div>
 
 <script type="text/javascript" src="snowstack.js"></script>
 <script type="text/javascript" src="snowstack-youtube.js"></script>
