@@ -180,7 +180,7 @@ function refreshImage(elem, cell)
 
 	zoomTimer = setTimeout(function ()
 	{
-		if (cell.info.zoom)
+		if (cell.info.zoom && !cell.video)
 		{
 			elem.src = cell.info.zoom;
 		}

@@ -178,11 +178,39 @@ function init_tedtalks()
     });
 }
 
+function init_trailers()
+{
+	jQuery.getJSON("appletrailers.txt", function (data)
+	{
+		snowstack_init(data, { captions: true, rows: 3 });
+	});
+}
+
 jQuery(window).load(function ()
 {
-//	snowstack_init(flickr, { captions: false });
-	init_tedtalks();
-//	snowstack_init(youtube, { captions: true, rows: 5 });
+	var demo = "ted";
+	var m = document.location.href.match(/demo=(\w+)/);
+	if (m != null)
+	{
+		demo = m[1];
+	}
+	
+	var demos = {
+		flickr: function () 
+		{ 
+			snowstack_init(flickr, { captions: false }); 
+		},
+		ted: function ()
+		{
+			init_tedtalks();
+		},
+		trailers: function ()
+		{
+			init_trailers();
+		}
+	}
+
+	demos[demo]();
 //  init_pageimages();
 });
 
