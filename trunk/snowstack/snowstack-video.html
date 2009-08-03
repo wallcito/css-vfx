@@ -155,13 +155,13 @@ function youtube(callback)
 //////////////////////////
 // HTML5 Video example (alpha)
 
-function image_pager(array, options)
+function image_pager(array, num, options)
 {
 	var offset = 0;
 
 	function someimages(callback)
 	{
-    	var end = Math.min(offset + 25, array.length);
+    	var end = Math.min(offset + num, array.length);
 		var videos = array.slice(offset, end);
     	callback(videos);
     	offset = end;
@@ -179,7 +179,7 @@ function init_tedtalks()
     		info.video = info.video_low;
     	});
     	
-    	image_pager(videos, { captions: true, rows: 5 });
+    	image_pager(videos, 25, { captions: true, rows: 5 });
     });
 }
 
@@ -187,7 +187,7 @@ function init_trailers()
 {
 	jQuery.getJSON("appletrailers.txt", function (data)
 	{
-		image_pager(data, { captions: true, rows: 3 });
+		image_pager(data, 18, { captions: true, rows: 3 });
 	});
 }
 
