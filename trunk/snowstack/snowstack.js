@@ -419,12 +419,14 @@ function snowstack_search(searchkey, searchterm)
 		snowstack_endsearch();
 	}
 
+	var s_re = new RegExp(searchterm, "i");
+
 	for (var i = 0; i < cells.length; ++i)
 	{
 		var match;
 		if (searchterm.length)
 		{
-			match = cells[i].info[searchkey].indexOf(searchterm) != -1;
+			match = cells[i].info[searchkey].search(s_re) != -1;
 		}
 		else
 		{
