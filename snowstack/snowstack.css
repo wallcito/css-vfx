@@ -65,6 +65,8 @@ div.cell .media
 	-webkit-transition-property: -webkit-transform;
 	-webkit-transition-duration: 550ms;
 	-webkit-transform: translate3d(0, 0, 0);
+	
+	-webkit-box-shadow: rgba(255, 255, 255, 0.5) 0 0 4px;
 }
 
 /* PERF
