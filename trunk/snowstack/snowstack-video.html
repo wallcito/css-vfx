@@ -212,13 +212,7 @@ function init_find()
 	}
 
 	field[0].addEventListener("input", searcher, false);
-	field[0].addEventListener("click", function ()
-	{
-		if (field.val() == "")
-		{
-			searcher();
-		}
-	}, false);
+	field[0].addEventListener("search", searcher, false);
 }
 
 jQuery(window).load(function ()
