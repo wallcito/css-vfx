@@ -9,6 +9,8 @@
     TODO: 
     	divide wall into years or topics
     	add video controller
+    	re-highlight videos when search field is cleared
+    	don't show speaker or date when the demo isn't TED (clean up flickering)
 -->
 
 <title>Snow Stack - WebKit 3D CSS Visual Effects</title>
@@ -70,8 +72,12 @@ div.bgfx
 </div>
 
 <div id="caption" class="caption">
-	Sort: <button onclick="snowstack_sort('date')">Date</button> <button onclick="snowstack_sort('author')">Speaker</button>
-	Find: <input onfocus="snowstack_startsearch()" onblur="snowstack_endsearch()" oninput="snowstack_search('title', this.value)" type="search">
+	<span id="sort_options">
+		Sort: <button onclick="snowstack_sort('date')">Date</button> <button onclick="snowstack_sort('author')">Speaker</button>
+	</span>
+	<span id="find_options">
+		Find: <input id="find" type="search">
+	</span>
 	snow stack / webkit css visual effects demo &mdash; arrow keys to move, space toggles magnify, enter to play
 </div>
 
@@ -194,6 +200,27 @@ function init_trailers()
 	});
 }
 
+function init_find()
+{
+	var field = jQuery("#find");
+	field.focus(snowstack_startsearch).blur(snowstack_endsearch);
+	
+	var searcher = function ()
+	{
+		console.log("searcher called");
+		snowstack_search('title', field.val());
+	}
+
+	field[0].addEventListener("input", searcher, false);
+	field[0].addEventListener("click", function ()
+	{
+		if (field.val() == "")
+		{
+			searcher();
+		}
+	}, false);
+}
+
 jQuery(window).load(function ()
 {
 	var demo = "ted";
@@ -203,9 +230,13 @@ jQuery(window).load(function ()
 		demo = m[1];
 	}
 	
+	init_find();
+	
 	var demos = {
 		flickr: function () 
-		{ 
+		{
+			jQuery("#sort_options").hide();
+			jQuery("#find_options").hide();
 			snowstack_init(flickr, { captions: false }); 
 		},
 		ted: function ()
@@ -214,6 +245,7 @@ jQuery(window).load(function ()
 		},
 		trailers: function ()
 		{
+			jQuery("#sort_options").hide();
 			init_trailers();
 		}
 	}
